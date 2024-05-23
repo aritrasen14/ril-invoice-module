@@ -39,7 +39,8 @@ export class Vendor extends DatabaseBaseEntity {
   public role!: string;
 
   //! Associated With user_roles_master
-  @ManyToOne(() => UserRoles, (userRole) => userRole.vendors)
+  @ManyToOne(() => UserRoles)
+  @JoinColumn({ name: 'user_role_id', referencedColumnName: 'id' })
   user_role: UserRoles;
 
   @Column({
