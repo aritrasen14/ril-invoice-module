@@ -1,17 +1,8 @@
-import { Invoice } from 'src/modules/invoice/entity/invoice.entity';
-import {
-  Column,
-  Entity,
-  Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { DatabaseBaseEntity, Invoice } from 'src/common/entities';
+import { Column, Entity, Index, OneToMany } from 'typeorm';
 
 @Entity()
-export class ProjectTypes {
-  @PrimaryGeneratedColumn('uuid')
-  public id!: string;
-
+export class ProjectTypes extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
@@ -30,18 +21,4 @@ export class ProjectTypes {
     select: true,
   })
   public project_type_des!: string;
-
-  @Column({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: true,
-  })
-  public created_at!: Date;
-
-  @Column({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: true,
-  })
-  public updated_at!: Date;
 }
