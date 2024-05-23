@@ -18,8 +18,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Reliance Invoice Module')
-    .setDescription('API for Reliance Invoice Module built with NestJS')
+    .setTitle('RIL Invoice Module')
+    .setDescription('API for RIL Invoice Module built with NestJS')
     .setVersion('1.0')
     .addBearerAuth(
       {
