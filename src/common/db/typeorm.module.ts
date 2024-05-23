@@ -13,6 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.get<string>('POSTGRES_USERNAME'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DATABASE'),
+        schema: configService.get<string>('POSTGRES_DATABASE_SCHEMA'),
         // entities: [
         // __dirname + '/**/*.entity{.ts,.js}'
         // ],
