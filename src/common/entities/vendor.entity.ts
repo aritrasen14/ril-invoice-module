@@ -7,14 +7,12 @@ export class Vendor extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    select: true,
   })
   public vendor_name!: string;
 
   @Column({
     type: 'varchar',
     length: 255,
-    select: true,
     unique: true,
   })
   @Index({ unique: true })
@@ -41,7 +39,6 @@ export class Vendor extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    select: true,
   })
   country_code: string;
 
@@ -54,7 +51,6 @@ export class Vendor extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    select: true,
   })
   public vendor_type_code!: string;
 
@@ -63,7 +59,6 @@ export class Vendor extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 36,
-    select: true,
   })
   public vendor_code!: string;
 }

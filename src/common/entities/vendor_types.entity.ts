@@ -1,19 +1,19 @@
 import { Column, Entity, Index } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 
-@Entity('user_roles')
-export class UserRoles extends DatabaseBaseEntity {
+@Entity('vendor_types')
+export class VendorTypes extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
-    length: 36,
+    length: 100,
   })
-  public user_role_des!: string;
+  public vendor_type_des!: string;
 
   @Column({
     type: 'varchar',
-    length: 36,
+    length: 100,
     unique: true,
   })
   @Index({ unique: true })
-  public user_role_code!: string;
+  public vendor_type_code!: string;
 }

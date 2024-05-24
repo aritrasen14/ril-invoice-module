@@ -1,25 +1,19 @@
 import { Column, Entity, Index } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 
-@Entity('company')
-export class Company extends DatabaseBaseEntity {
+@Entity('invoice_types')
+export class InvoiceTypes extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
-    length: 255,
+    length: 100,
   })
-  public company_name!: string;
+  public invoice_type_des!: string;
 
   @Column({
     type: 'varchar',
     length: 36,
-  })
-  public vendor_id!: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
     unique: true,
   })
   @Index({ unique: true })
-  public company_code!: string;
+  public invoice_type_code!: string;
 }

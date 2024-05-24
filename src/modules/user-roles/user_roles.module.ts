@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRoles } from 'src/common/entities';
+import { UserAccessStatus } from 'src/common/entities';
+import { MasterModule } from '../master/master.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRoles])],
+  imports: [TypeOrmModule.forFeature([UserAccessStatus]), MasterModule],
   controllers: [],
   providers: [],
   exports: [],

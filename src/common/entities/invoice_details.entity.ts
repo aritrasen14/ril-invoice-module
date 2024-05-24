@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 
 @Entity('invoice_details')
@@ -30,6 +30,7 @@ export class InvoiceDetails extends DatabaseBaseEntity {
     type: 'varchar',
     length: 255,
   })
+  @Index()
   public vendor_code!: string;
 
   //! Associated with Vendors

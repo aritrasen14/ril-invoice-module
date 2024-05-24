@@ -8,6 +8,8 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/filters';
 import { InvoiceModule } from './modules/invoice/invoice.module';
 import { UserRoleModule } from './modules/user-roles/user_roles.module';
+import { AttachmentModule } from './modules/attachments/attachments.module';
+import { MasterModule } from './Modules/master/master.module';
 
 @Module({
   imports: [
@@ -21,9 +23,11 @@ import { UserRoleModule } from './modules/user-roles/user_roles.module';
     TypeOrmSharedModule,
 
     // * Import Custom Modules
+    MasterModule,
     InvoiceModule,
     UserRoleModule,
     VendorModule,
+    AttachmentModule,
   ],
   controllers: [AppController],
   providers: [

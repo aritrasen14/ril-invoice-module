@@ -1,17 +1,17 @@
 import { Column, Entity } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 
-@Entity('invoice_status')
-export class InvoiceStatus extends DatabaseBaseEntity {
+@Entity('country_codes')
+export class CountryCodes extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
-    length: 10,
+    length: 36,
   })
-  public invoice_sts_code!: string;
+  public country_code!: string;
 
   @Column({
     type: 'varchar',
-    length: 255,
+    length: 100,
   })
-  public invoice_sts_des!: string;
+  public country_name!: string;
 }
