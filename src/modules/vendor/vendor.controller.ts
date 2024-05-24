@@ -16,13 +16,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { VendorService } from './vendor.service';
-import { Vendor } from './entity/vendor.entity';
-import {
-  CreateVendorDto,
-  CreateVendorResponseDto,
-  UpdateVendorDto,
-} from './dtos/vendor.dto';
+import { Vendor } from '../../common/entities';
 import { UUIDValidationPipe } from 'src/Common/pipes';
+import {
+  CreateVendorRequestDto,
+  UpdateVendorRequestDto,
+  VendorResponseDto,
+} from './dtos';
 
 @ApiTags('vendor')
 @Controller('vendor')
@@ -39,11 +39,12 @@ export class VendorController {
   })
   @ApiOkResponse({
     description: 'Successfully fetched all vendors!',
-    type: [CreateVendorResponseDto],
+    type: [VendorResponseDto],
   })
-  async fetchVendors(): Promise<Vendor[]> {
+  async fetchVendors(): Promise<VendorResponseDto[]> {
     this.logger.debug('Inside fetchVendors');
-    return await this.vendorService.fetchVendors();
+    const result = await this.vendorService.fetchVendors();
+    return result.map((element) => new VendorResponseDto(element));
   }
 
   // * Create vendor
@@ -54,9 +55,9 @@ export class VendorController {
   })
   @ApiCreatedResponse({
     description: 'Successfully created a vendor!',
-    type: CreateVendorResponseDto,
+    type: VendorResponseDto,
   })
-  async createVendor(@Body() body: CreateVendorDto): Promise<Vendor> {
+  async createVendor(@Body() body: CreateVendorRequestDto): Promise<Vendor> {
     this.logger.debug('Inside createVendor');
     return await this.vendorService.createVendor(body);
   }
@@ -69,7 +70,7 @@ export class VendorController {
   })
   @ApiOkResponse({
     description: 'Successfully fetched vendor!',
-    type: CreateVendorResponseDto,
+    type: VendorResponseDto,
   })
   async fetchVendorById(
     @Param('id', UUIDValidationPipe) id: string,
@@ -86,11 +87,11 @@ export class VendorController {
   })
   @ApiOkResponse({
     description: 'Vendor updated successfully!',
-    type: CreateVendorResponseDto,
+    type: VendorResponseDto,
   })
   async updateVendor(
     @Param('id', UUIDValidationPipe) id: string,
-    @Body() body: UpdateVendorDto,
+    @Body() body: UpdateVendorRequestDto,
   ): Promise<Vendor> {
     this.logger.debug('Inside updateVendor');
     return await this.vendorService.updateVendor(id, body);

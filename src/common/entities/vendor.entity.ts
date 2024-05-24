@@ -2,9 +2,6 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 import { UserRoles } from './user_roles.entity';
 
-/// @setBeforeInsert --> createdAt, updatedAt
-/// @setBeforeUpdate --> updatedAt
-
 @Entity('vendor')
 export class Vendor extends DatabaseBaseEntity {
   @Column({
@@ -29,14 +26,6 @@ export class Vendor extends DatabaseBaseEntity {
     select: false,
   })
   password!: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    select: true,
-  })
-  @JoinColumn({ name: 'role', referencedColumnName: 'user_role_code' })
-  public role!: string;
 
   //! Associated With user_roles_master
   @ManyToOne(() => UserRoles)

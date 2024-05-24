@@ -9,51 +9,52 @@ export class VendorResponseDto extends EntityResponseDto implements IVendor {
     super();
     this.vendor_name = vendor.vendor_name;
     this.email = vendor.email;
-    this.role = vendor.role;
     this.country_code = vendor.country_code;
     this.vendor_type_code = vendor.vendor_type_code;
     this.vendor_code = vendor.vendor_code;
-    this.user_role_code = vendor.user_role.user_role_code;
-    this.user_role_des = vendor.user_role.user_role_des;
+
+    // *  Values Coming from UserRoles
+    this.user_role_code = vendor.user_role?.user_role_code;
+    this.user_role_des = vendor.user_role?.user_role_des;
   }
 
   @ApiResponseProperty({
     example: 'john',
   })
-  public vendor_name: string;
+  readonly vendor_name: string;
 
   @ApiResponseProperty({
     example: 'john@email.com',
   })
-  public email: string;
+  readonly email: string;
 
   @ApiResponseProperty({
     example: 'V',
   })
-  public role: string;
+  readonly role: string;
 
   @ApiResponseProperty({
     example: 'IND',
   })
-  public country_code: string;
+  readonly country_code: string;
 
   @ApiResponseProperty({
     example: 'IT',
   })
-  public vendor_type_code: string;
+  readonly vendor_type_code: string;
 
   @ApiResponseProperty({
     example: '34567',
   })
-  public vendor_code: string;
+  readonly vendor_code: string;
 
   @ApiResponseProperty({
     example: 'VENDOR',
   })
-  public user_role_des: string;
+  readonly user_role_des?: string;
 
   @ApiResponseProperty({
     example: 'V',
   })
-  public user_role_code: string;
+  readonly user_role_code?: string;
 }

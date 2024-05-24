@@ -1,8 +1,8 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Vendor } from './entity/vendor.entity';
+import { Vendor } from '../../common/entities';
 import { Repository } from 'typeorm';
-import { CreateVendorDto, UpdateVendorDto } from './dtos/vendor.dto';
+import { CreateVendorRequestDto, UpdateVendorRequestDto } from './dtos';
 
 @Injectable()
 export class VendorService {
@@ -15,10 +15,14 @@ export class VendorService {
 
   async fetchVendors() {
     this.logger.debug('Inside fetchVendors');
-    return await this.vendorRepo.find();
+    // return await this.vendorRepo.find({ relations: ['user_role'] });
+    return await this.vendorRepo
+      .createQueryBuilder('vendor')
+      .leftJoinAndSelect('vendor.user_role', 'user_role')
+      .getMany();
   }
 
-  async createVendor(body: CreateVendorDto): Promise<Vendor> {
+  async createVendor(body: CreateVendorRequestDto): Promise<Vendor> {
     this.logger.debug('Inside createVendor');
     const resultQuery = await this.vendorRepo
       .createQueryBuilder()
@@ -35,7 +39,10 @@ export class VendorService {
     return await this.vendorRepo.findOneBy({ id });
   }
 
-  async updateVendor(id: string, body: UpdateVendorDto): Promise<Vendor> {
+  async updateVendor(
+    id: string,
+    body: UpdateVendorRequestDto,
+  ): Promise<Vendor> {
     this.logger.debug('Inside updateVendor');
 
     const updateResult = await this.vendorRepo
