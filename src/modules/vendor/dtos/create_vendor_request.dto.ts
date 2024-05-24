@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsString,
   IsStrongPassword,
+  IsUUID,
 } from 'class-validator';
 
 // * Create request DTO for Vendor
@@ -47,39 +48,37 @@ export class CreateVendorRequestDto {
   @ApiProperty({
     type: String,
     required: true,
-    description: 'vendor_role',
-    example: 'V',
+    description: 'vendor user_role_id',
+    example: 'd42c15ee-7eef-4656-b777-d4e3b615945c',
   })
   @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  role: string;
+  @IsUUID()
+  user_role_id: string;
 
   @ApiProperty({
-    description: 'vendor_country_code',
-    example: 'IND',
+    required: true,
+    description: 'vendor country_code',
+    example: '29c665e2-55ab-4d1a-aca2-11b4ca7b3183',
   })
   @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  country_code: string;
+  @IsUUID()
+  country_code_id: string;
 
   @ApiProperty({
     type: String,
     required: true,
-    example: 'IT',
+    example: '574b5a02-fa68-406f-9efe-e186724fa0a2',
     description: 'vendor type_code',
   })
   @IsDefined()
-  @IsString()
-  @IsNotEmpty()
-  vendor_type_code: string;
+  @IsUUID()
+  vendor_type_id: string;
 
   @ApiProperty({
     type: String,
     required: true,
     example: '1234',
-    description: 'vendor type_code',
+    description: 'vendor_code',
   })
   @IsDefined()
   @IsString()

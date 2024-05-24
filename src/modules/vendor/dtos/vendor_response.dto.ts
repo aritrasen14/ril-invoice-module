@@ -9,13 +9,19 @@ export class VendorResponseDto extends EntityResponseDto implements IVendor {
     super();
     this.vendor_name = vendor.vendor_name;
     this.email = vendor.email;
-    this.country_code = vendor.country_code;
-    this.vendor_type_code = vendor.vendor_type_code;
     this.vendor_code = vendor.vendor_code;
 
     // *  Values Coming from UserRoles
     this.user_role_code = vendor.user_role?.user_role_code;
     this.user_role_des = vendor.user_role?.user_role_des;
+
+    // * Values coming from country_codes
+    this.country_code = vendor.country?.country_code;
+    this.country_name = vendor.country?.country_name;
+
+    // * Values coming from vendor_types
+    this.vendor_type_code = vendor.vendor_type?.vendor_type_code;
+    this.vendor_type_des = vendor.vendor_type?.vendor_type_des;
   }
 
   @ApiResponseProperty({
@@ -34,16 +40,6 @@ export class VendorResponseDto extends EntityResponseDto implements IVendor {
   readonly role: string;
 
   @ApiResponseProperty({
-    example: 'IND',
-  })
-  readonly country_code: string;
-
-  @ApiResponseProperty({
-    example: 'IT',
-  })
-  readonly vendor_type_code: string;
-
-  @ApiResponseProperty({
     example: '34567',
   })
   readonly vendor_code: string;
@@ -57,4 +53,24 @@ export class VendorResponseDto extends EntityResponseDto implements IVendor {
     example: 'V',
   })
   readonly user_role_code?: string;
+
+  @ApiResponseProperty({
+    example: 'IND',
+  })
+  readonly country_code: string;
+
+  @ApiResponseProperty({
+    example: 'INDIA',
+  })
+  readonly country_name: string;
+
+  @ApiResponseProperty({
+    example: 'IT',
+  })
+  readonly vendor_type_code: string;
+
+  @ApiResponseProperty({
+    example: 'IT',
+  })
+  readonly vendor_type_des: string;
 }

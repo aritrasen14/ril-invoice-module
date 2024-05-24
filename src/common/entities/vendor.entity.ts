@@ -1,6 +1,8 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 import { UserRoles } from './user_roles.entity';
+import { CountryCodes } from './country_codes.entity';
+import { VendorTypes } from './vendor_types.entity';
 
 @Entity('vendor')
 export class Vendor extends DatabaseBaseEntity {
@@ -25,10 +27,14 @@ export class Vendor extends DatabaseBaseEntity {
   })
   password!: string;
 
-  //! Associated With user_roles_master
+  @Column({
+    type: 'varchar',
+  })
+  public user_role_id: string;
+
   @ManyToOne(() => UserRoles)
   @JoinColumn({ name: 'user_role_id', referencedColumnName: 'id' })
-  user_role: UserRoles;
+  public user_role!: UserRoles;
 
   @Column({
     type: 'boolean',
@@ -38,27 +44,26 @@ export class Vendor extends DatabaseBaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 255,
   })
-  country_code: string;
+  public country_code_id!: string;
 
-  //! Associated With Country_codes
-
-  // TODO Define Country
-  //   @ManyToOne(() => CountryCodes, (country) => country.vendors)
-  //   country: CountryMaster;
+  @ManyToOne(() => CountryCodes)
+  @JoinColumn({ name: 'country_code_id', referencedColumnName: 'id' })
+  public country: CountryCodes;
 
   @Column({
     type: 'varchar',
-    length: 255,
   })
-  public vendor_type_code!: string;
+  public vendor_type_id!: string;
 
-  //! associated with vendor_types table
+  @ManyToOne(() => VendorTypes)
+  @JoinColumn({ name: 'vendor_type_id', referencedColumnName: 'id' })
+  public vendor_type: VendorTypes;
 
   @Column({
     type: 'varchar',
     length: 36,
+    unique: true,
   })
   public vendor_code!: string;
 }

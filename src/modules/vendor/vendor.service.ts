@@ -19,6 +19,8 @@ export class VendorService {
     return await this.vendorRepo
       .createQueryBuilder('vendor')
       .leftJoinAndSelect('vendor.user_role', 'user_role')
+      .leftJoinAndSelect('vendor.country', 'country')
+      .leftJoinAndSelect('vendor.vendor_type', 'vendor_type')
       .getMany();
   }
 
