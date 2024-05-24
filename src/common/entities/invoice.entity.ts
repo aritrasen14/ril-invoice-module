@@ -6,7 +6,6 @@ export class Invoice extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-
     unique: true,
   })
   @Index({ unique: true })
@@ -15,7 +14,6 @@ export class Invoice extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-
     unique: true,
     nullable: true,
   })

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRoles } from 'src/common/entities';
+import { AttachmentTypes } from '../../common/entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRoles])],
+  imports: [TypeOrmModule.forFeature([AttachmentTypes])],
   controllers: [],
   providers: [],
   exports: [],
 })
-export class UserRoleModule {}
+export class AttachmentTypesModule {}

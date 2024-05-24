@@ -49,7 +49,7 @@ export class InvoiceDetails extends DatabaseBaseEntity {
   //! Associated with invoices
 
   @Column({
-    type: 'date',
+    type: 'timestamptz',
   })
   public inv_date!: Date;
 
@@ -92,13 +92,13 @@ export class InvoiceDetails extends DatabaseBaseEntity {
   public total_invoice_amount!: number;
 
   @Column({
-    type: 'date',
+    type: 'timestamptz',
     nullable: true,
   })
   public rendered_service_start_dt: Date;
 
   @Column({
-    type: 'date',
+    type: 'timestamptz',
     nullable: true,
   })
   public rendered_service_end_dt: Date;
