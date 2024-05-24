@@ -1,5 +1,6 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
+import { UserRoles } from './user_roles.entity';
 
 @Entity('access_user')
 export class AccessUser extends DatabaseBaseEntity {
@@ -11,9 +12,12 @@ export class AccessUser extends DatabaseBaseEntity {
   @Index({ unique: true })
   public email!: string;
 
-  user_role_id;
+  @Column({ type: 'uuid' })
+  public user_role_id!: string;
 
-  //! Associated With user_roles_master
+  @ManyToOne(() => UserRoles)
+  @JoinColumn({ name: 'user_role_id', referencedColumnName: 'id' })
+  public user_role!: UserRoles;
 
   @Column({
     type: 'boolean',

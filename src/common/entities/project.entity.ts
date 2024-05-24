@@ -1,5 +1,7 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
+import { Vendor } from './vendor.entity';
+import { Company } from './company.entity';
 
 @Entity('project')
 export class Project extends DatabaseBaseEntity {
@@ -18,11 +20,17 @@ export class Project extends DatabaseBaseEntity {
   @Index({ unique: true })
   public project_code!: string;
 
-  // vendor_id;
+  @Column({ type: 'uuid' })
+  public vendor_id!: string;
 
-  // //! Associated with Vendors
+  @ManyToOne(() => Vendor)
+  @JoinColumn({ name: 'vendor_id', referencedColumnName: 'id' })
+  public vendor: Vendor;
 
-  // company_id;
+  @Column({ type: 'uuid', nullable: true })
+  public company_id!: string;
 
-  // //! Associated with Company
+  @ManyToOne(() => Company)
+  @JoinColumn({ name: 'company_id', referencedColumnName: 'id' })
+  public company: Company;
 }

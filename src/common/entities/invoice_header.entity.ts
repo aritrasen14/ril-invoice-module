@@ -1,5 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
+import { InvoiceTypes } from './invoice_types.entity';
+import { Invoice } from './invoice.entity';
 
 @Entity('invoice_header')
 export class InvoiceHeader extends DatabaseBaseEntity {
@@ -20,12 +22,13 @@ export class InvoiceHeader extends DatabaseBaseEntity {
   public date_of_certification!: Date;
 
   @Column({
-    type: 'varchar',
-    length: 255,
+    type: 'uuid',
   })
-  public invoice_type_code!: string;
+  public invoice_type_id!: string;
 
-  //! associated with invoice_types (TAX, BOS)
+  @ManyToOne(() => InvoiceTypes)
+  @JoinColumn({ name: 'invoice_type_id', referencedColumnName: 'id' })
+  public invoice_type!: InvoiceTypes;
 
   @Column({
     type: 'boolean',
@@ -77,8 +80,12 @@ export class InvoiceHeader extends DatabaseBaseEntity {
   })
   public udayam_number!: boolean;
 
-  // TODO Relation id
-  //! Assciated with Invoices
+  @Column({ type: 'uuid' })
+  public invoice_id!: string;
+
+  @ManyToOne(() => Invoice)
+  @JoinColumn({ name: 'invoice_id', referencedColumnName: 'id' })
+  public invoice: Invoice;
 
   @Column({
     type: 'timestamptz',

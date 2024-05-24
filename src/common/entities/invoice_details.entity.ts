@@ -1,5 +1,9 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
+import { Vendor } from './vendor.entity';
+import { Invoice } from './invoice.entity';
+import { Currency } from './currency.entity';
+import { GstTypes } from './gst_types.entity';
 
 @Entity('invoice_details')
 export class InvoiceDetails extends DatabaseBaseEntity {
@@ -27,13 +31,14 @@ export class InvoiceDetails extends DatabaseBaseEntity {
   public work_area!: string;
 
   @Column({
-    type: 'varchar',
-    length: 255,
+    type: 'uuid',
   })
   @Index()
-  public vendor_code!: string;
+  public vendor_id!: string;
 
-  //! Associated with Vendors
+  @ManyToOne(() => Vendor)
+  @JoinColumn({ name: 'vendor_id', referencedColumnName: 'id' })
+  public vendor!: Vendor;
 
   @Column({
     type: 'varchar',
@@ -41,17 +46,14 @@ export class InvoiceDetails extends DatabaseBaseEntity {
   })
   public gst_no!: string;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
-  })
+  @Column({ type: 'uuid' })
   public invoice_id!: string;
 
-  //! Associated with invoices
+  @ManyToOne(() => Invoice)
+  @JoinColumn({ name: 'invoice_id', referencedColumnName: 'id' })
+  public invoice!: Invoice;
 
-  @Column({
-    type: 'timestamptz',
-  })
+  @Column({ type: 'timestamptz' })
   public inv_date!: Date;
 
   @Column({
@@ -60,13 +62,19 @@ export class InvoiceDetails extends DatabaseBaseEntity {
   })
   public inv_basic_value!: number;
 
-  // currency_code
+  @Column({ type: 'uuid' })
+  public currency_id!: string;
 
-  //! Associated with currency_master
+  @ManyToOne(() => Currency)
+  @JoinColumn({ name: 'currency_id', referencedColumnName: 'id' })
+  public currency!: Currency;
 
-  gst_type_code;
+  @Column({ type: 'uuid' })
+  public gst_type_id: string;
 
-  //! Associated with gst_types
+  @ManyToOne(() => GstTypes)
+  @JoinColumn({ name: 'gst_type_id', referencedColumnName: 'id' })
+  public gst_type: GstTypes;
 
   @Column({
     type: 'numeric',

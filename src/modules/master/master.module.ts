@@ -10,6 +10,7 @@ import {
   InvoiceTypes,
   VendorTypes,
   ProjectTypes,
+  Currency,
 } from 'src/common/entities';
 
 @Module({
@@ -24,6 +25,7 @@ import {
       InvoiceCategories,
       GstTypes,
       ProjectTypes,
+      Currency,
     ]),
   ],
 })

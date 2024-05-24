@@ -1,7 +1,7 @@
 import { DatabaseBaseEntity } from 'src/common/entities';
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity()
+@Entity('project_types')
 export class ProjectTypes extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',

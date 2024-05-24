@@ -1,11 +1,18 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
+import { Invoice } from './invoice.entity';
 
 @Entity('advance_adjustment_details')
 export class AdvanceAdjustmentDetails extends DatabaseBaseEntity {
-  performa_invoice_id;
+  @Column({
+    type: 'uuid',
+    nullable: true,
+  })
+  public performa_invoice_id: string;
 
-  //! Associated with Performa Invoice
+  @ManyToOne(() => Invoice)
+  @JoinColumn({ name: 'performa_invoice_id', referencedColumnName: 'id' })
+  public performa_invoice: Invoice;
 
   @Column({
     type: 'numeric',
@@ -30,6 +37,13 @@ export class AdvanceAdjustmentDetails extends DatabaseBaseEntity {
   })
   public utilization_dt!: Date;
 
-  Invoice_id;
-  //! Associated with Adjusted Invoices
+  @Column({
+    type: 'uuid',
+    nullable: true,
+  })
+  public invoice_id: string;
+
+  @ManyToOne(() => Invoice)
+  @JoinColumn({ name: 'invoice_id', referencedColumnName: 'id' })
+  public invoice: Invoice;
 }
