@@ -1,5 +1,14 @@
-import { DatabaseBaseEntity } from 'src/common/entities';
-import { Column, Entity, Index } from 'typeorm';
+import {
+  Company,
+  DatabaseBaseEntity,
+  InvoiceCategories,
+  InvoiceStatus,
+  InvoiceTypes,
+  Project,
+  ProjectTypes,
+  Vendor,
+} from 'src/common/entities';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('invoice')
 export class Invoice extends DatabaseBaseEntity {
@@ -28,12 +37,13 @@ export class Invoice extends DatabaseBaseEntity {
   public deal_slip_no!: string;
 
   @Column({
-    type: 'varchar',
-    length: 50,
+    type: 'uuid',
   })
-  public invoice_type_code!: string;
+  public invoice_type_id!: string;
 
-  //! associated with invoice_types (TAX, BOS)
+  @ManyToOne(() => InvoiceTypes)
+  @JoinColumn({ name: 'invoice_type_id', referencedColumnName: 'id' })
+  public invoice_type: InvoiceTypes;
 
   @Column({
     type: 'varchar',
@@ -57,20 +67,20 @@ export class Invoice extends DatabaseBaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 255,
   })
   @Index()
   public vendor_code!: string;
 
-  //! Associated with vendors
+  @ManyToOne(() => Vendor)
+  @JoinColumn({ name: 'vendor_code', referencedColumnName: 'id' })
+  public vendor: Vendor;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
-  })
-  public invoice_sts_code!: string;
+  @Column({ type: 'uuid' })
+  public invoice_status_id!: string;
 
-  //! Associated with invoice_status master
+  @ManyToOne(() => InvoiceStatus)
+  @JoinColumn({ name: 'invoice_status_id', referencedColumnName: 'id' })
+  public invoice_status!: InvoiceStatus;
 
   @Column({
     type: 'varchar',
@@ -78,7 +88,12 @@ export class Invoice extends DatabaseBaseEntity {
   })
   public invoice_category_code!: string;
 
-  //! Associated with invoice_categories
+  @Column({ type: 'uuid' })
+  public invoice_category_id!: string;
+
+  @ManyToOne(() => InvoiceCategories)
+  @JoinColumn({ name: 'invoice_category_id', referencedColumnName: 'id' })
+  public invoice_category!: InvoiceCategories;
 
   @Column({
     type: 'varchar',
@@ -88,38 +103,29 @@ export class Invoice extends DatabaseBaseEntity {
   })
   public generated_inv_file_path: string;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
+  @Column({ type: 'uuid' })
+  public project_id!: string;
 
-    nullable: true,
-  })
-  public project_code: string;
+  @ManyToOne(() => Project)
+  @JoinColumn({ name: 'project_id', referencedColumnName: 'id' })
+  public project: Project;
 
-  //! Associated With Projects Table
+  @Column({ type: 'uuid', nullable: true })
+  public company_id!: string;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
+  @ManyToOne(() => Company)
+  @JoinColumn({ name: 'company_id', referencedColumnName: 'id' })
+  public company: Company;
 
-    nullable: true,
-  })
-  public company_code: string;
+  @Column({ type: 'uuid', nullable: true })
+  public project_type_id!: string;
 
-  //! Associated with COMPANIES table
-
-  @Column({
-    type: 'varchar',
-
-    nullable: true,
-  })
-  public project_type_code: string;
-
-  //! Associated with Project_types
+  @ManyToOne(() => ProjectTypes)
+  @JoinColumn({ name: 'project_type_id', referencedColumnName: 'id' })
+  public projectType: ProjectTypes;
 
   @Column({
     type: 'timestamptz',
-
     nullable: true,
   })
   public management_approval_dt: Date;
@@ -155,7 +161,4 @@ export class Invoice extends DatabaseBaseEntity {
     type: 'numeric',
   })
   public remaining_amount!: number;
-
-  //! Associated With Projects Table
-  // project_id
 }

@@ -1,6 +1,7 @@
-import { Column, Index } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 
+@Entity('project')
 export class Project extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
@@ -17,11 +18,11 @@ export class Project extends DatabaseBaseEntity {
   @Index({ unique: true })
   public project_code!: string;
 
-  vendor_id;
+  // vendor_id;
 
-  //! Associated with Vendors
+  // //! Associated with Vendors
 
-  company_id;
+  // company_id;
 
-  //! Associated with Company
+  // //! Associated with Company
 }

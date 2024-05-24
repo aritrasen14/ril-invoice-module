@@ -28,7 +28,7 @@ export class Vendor extends DatabaseBaseEntity {
   password!: string;
 
   @Column({
-    type: 'varchar',
+    type: 'uuid',
   })
   public user_role_id: string;
 
@@ -43,7 +43,7 @@ export class Vendor extends DatabaseBaseEntity {
   public is_verified!: boolean;
 
   @Column({
-    type: 'varchar',
+    type: 'uuid',
   })
   public country_code_id!: string;
 
@@ -52,7 +52,7 @@ export class Vendor extends DatabaseBaseEntity {
   public country: CountryCodes;
 
   @Column({
-    type: 'varchar',
+    type: 'uuid',
   })
   public vendor_type_id!: string;
 
@@ -65,5 +65,6 @@ export class Vendor extends DatabaseBaseEntity {
     length: 36,
     unique: true,
   })
+  @Index({ unique: true })
   public vendor_code!: string;
 }
