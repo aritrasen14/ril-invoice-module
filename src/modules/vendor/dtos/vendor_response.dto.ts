@@ -1,10 +1,18 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { EntityResponseDto } from 'src/common/dtos';
 import { Vendor } from 'src/common/entities';
-import { IVendor } from 'src/common/interfaces';
+import {
+  ICountry,
+  IUserRoles,
+  IVendor,
+  IVendorTypes,
+} from 'src/common/interfaces';
 
 // * Response DTO for Vendor
-export class VendorResponseDto extends EntityResponseDto implements IVendor {
+export class VendorResponseDto
+  extends EntityResponseDto
+  implements IVendor, IUserRoles, ICountry, IVendorTypes
+{
   constructor(vendor: Vendor) {
     super();
     this.vendor_name = vendor.vendor_name;
@@ -57,12 +65,12 @@ export class VendorResponseDto extends EntityResponseDto implements IVendor {
   @ApiResponseProperty({
     example: 'IND',
   })
-  readonly country_code: string;
+  readonly country_code?: string;
 
   @ApiResponseProperty({
     example: 'INDIA',
   })
-  readonly country_name: string;
+  readonly country_name?: string;
 
   @ApiResponseProperty({
     example: 'IT',

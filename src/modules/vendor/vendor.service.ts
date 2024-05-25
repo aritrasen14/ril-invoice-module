@@ -2,7 +2,11 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Vendor } from '../../common/entities';
 import { Repository } from 'typeorm';
-import { CreateVendorRequestDto, UpdateVendorRequestDto } from './dtos';
+import {
+  CreateVendorRequestDto,
+  UpdateVendorRequestDto,
+  VendorResponseDto,
+} from './dtos';
 
 @Injectable()
 export class VendorService {
@@ -24,8 +28,9 @@ export class VendorService {
       .getMany();
   }
 
-  async createVendor(body: CreateVendorRequestDto): Promise<Vendor> {
+  async createVendor(body: CreateVendorRequestDto): Promise<VendorResponseDto> {
     this.logger.debug('Inside createVendor');
+
     const resultQuery = await this.vendorRepo
       .createQueryBuilder()
       .insert()
@@ -33,7 +38,7 @@ export class VendorService {
       .returning('*')
       .execute();
 
-    return resultQuery.raw[0];
+    return new VendorResponseDto(resultQuery.raw[0]);
   }
 
   async fetchVendorById(id: string) {

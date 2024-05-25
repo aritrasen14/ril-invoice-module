@@ -57,7 +57,9 @@ export class VendorController {
     description: 'Successfully created a vendor!',
     type: VendorResponseDto,
   })
-  async createVendor(@Body() body: CreateVendorRequestDto): Promise<Vendor> {
+  async createVendor(
+    @Body() body: CreateVendorRequestDto,
+  ): Promise<VendorResponseDto> {
     this.logger.debug('Inside createVendor');
     return await this.vendorService.createVendor(body);
   }
