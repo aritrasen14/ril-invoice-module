@@ -7,7 +7,7 @@ export class InvoiceTypes extends DatabaseBaseEntity {
     type: 'varchar',
     length: 100,
   })
-  public invoice_type_des!: string;
+  invoice_type_des!: string;
 
   @Column({
     type: 'varchar',
@@ -15,5 +15,5 @@ export class InvoiceTypes extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public invoice_type_code!: string;
+  invoice_type_code!: string;
 }

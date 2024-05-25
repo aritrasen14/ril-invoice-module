@@ -8,14 +8,14 @@ export class Company extends DatabaseBaseEntity {
     type: 'varchar',
     length: 255,
   })
-  public company_name!: string;
+  company_name!: string;
 
   @Column({ type: 'uuid' })
-  public vendor_id!: string;
+  vendor_id!: string;
 
   @ManyToOne(() => Vendor)
   @JoinColumn({ name: 'vendor_id', referencedColumnName: 'id' })
-  public vendor: Vendor;
+  vendor: Vendor;
 
   @Column({
     type: 'varchar',
@@ -23,5 +23,5 @@ export class Company extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public company_code!: string;
+  company_code!: string;
 }

@@ -15,24 +15,24 @@ export class AttachmentTypes extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public attachment_type_code!: string;
+  attachment_type_code!: string;
 
   @Column({
     type: 'varchar',
     length: 36,
   })
-  public attachment_type_des!: string;
+  attachment_type_des!: string;
 
   @CreateDateColumn({
     type: 'timestamptz',
     update: false,
     default: () => 'CURRENT_TIMESTAMP',
   })
-  public attachment_type_rec_add_dt!: Date;
+  attachment_type_rec_add_dt!: Date;
 
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  public attachment_type_rec_mod_dt!: Date;
+  attachment_type_rec_mod_dt!: Date;
 }

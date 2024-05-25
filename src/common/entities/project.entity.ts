@@ -10,7 +10,7 @@ export class Project extends DatabaseBaseEntity {
     length: 255,
   })
   @Index()
-  public project_name!: string;
+  project_name!: string;
 
   @Column({
     type: 'varchar',
@@ -18,19 +18,19 @@ export class Project extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public project_code!: string;
+  project_code!: string;
 
   @Column({ type: 'uuid' })
-  public vendor_id!: string;
+  vendor_id!: string;
 
   @ManyToOne(() => Vendor)
   @JoinColumn({ name: 'vendor_id', referencedColumnName: 'id' })
-  public vendor: Vendor;
+  vendor: Vendor;
 
   @Column({ type: 'uuid', nullable: true })
-  public company_id!: string;
+  company_id!: string;
 
   @ManyToOne(() => Company)
   @JoinColumn({ name: 'company_id', referencedColumnName: 'id' })
-  public company: Company;
+  company: Company;
 }

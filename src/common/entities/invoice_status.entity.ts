@@ -7,11 +7,11 @@ export class InvoiceStatus extends DatabaseBaseEntity {
     type: 'varchar',
     length: 10,
   })
-  public invoice_sts_code!: string;
+  invoice_sts_code!: string;
 
   @Column({
     type: 'varchar',
     length: 255,
   })
-  public invoice_sts_des!: string;
+  invoice_sts_des!: string;
 }

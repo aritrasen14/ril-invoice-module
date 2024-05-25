@@ -8,11 +8,11 @@ export class CountryCodes extends DatabaseBaseEntity {
     length: 36,
   })
   @Index({ unique: true })
-  public country_code!: string;
+  country_code!: string;
 
   @Column({
     type: 'varchar',
     length: 100,
   })
-  public country_name!: string;
+  country_name!: string;
 }

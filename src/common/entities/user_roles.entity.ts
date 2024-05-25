@@ -7,7 +7,7 @@ export class UserRoles extends DatabaseBaseEntity {
     type: 'varchar',
     length: 36,
   })
-  public user_role_des!: string;
+  user_role_des!: string;
 
   @Column({
     type: 'varchar',
@@ -15,5 +15,5 @@ export class UserRoles extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public user_role_code!: string;
+  user_role_code!: string;
 }

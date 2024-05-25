@@ -10,18 +10,18 @@ export class AccessUser extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public email!: string;
+  email!: string;
 
   @Column({ type: 'uuid' })
-  public user_role_id!: string;
+  user_role_id!: string;
 
   @ManyToOne(() => UserRoles)
   @JoinColumn({ name: 'user_role_id', referencedColumnName: 'id' })
-  public user_role!: UserRoles;
+  user_role!: UserRoles;
 
   @Column({
     type: 'boolean',
     default: false,
   })
-  public is_verified!: boolean;
+  is_verified!: boolean;
 }

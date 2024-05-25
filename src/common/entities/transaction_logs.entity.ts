@@ -15,23 +15,23 @@ export class TransactionLogs extends DatabaseBaseEntity {
     type: 'uuid',
     nullable: true,
   })
-  public invoice_id: string;
+  invoice_id: string;
 
   @ManyToOne(() => Invoice)
   @JoinColumn({ name: 'invoice_id', referencedColumnName: 'id' })
-  public invoice: Invoice;
+  invoice: Invoice;
 
   @Column({ type: 'uuid' })
-  public status_id!: string;
+  status_id!: string;
 
   @ManyToOne(() => InvoiceStatus)
   @JoinColumn({ name: 'status_id', referencedColumnName: 'id' })
-  public status!: InvoiceStatus;
+  status!: InvoiceStatus;
 
   @CreateDateColumn({
     type: 'timestamptz',
     update: false,
     default: () => 'CURRENT_TIMESTAMP',
   })
-  public date!: Date;
+  date!: Date;
 }

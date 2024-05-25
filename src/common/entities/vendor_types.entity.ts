@@ -7,7 +7,7 @@ export class VendorTypes extends DatabaseBaseEntity {
     type: 'varchar',
     length: 100,
   })
-  public vendor_type_des!: string;
+  vendor_type_des!: string;
 
   @Column({
     type: 'varchar',
@@ -15,5 +15,5 @@ export class VendorTypes extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public vendor_type_code!: string;
+  vendor_type_code!: string;
 }

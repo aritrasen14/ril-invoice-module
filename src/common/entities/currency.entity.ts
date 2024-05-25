@@ -10,18 +10,18 @@ export class Currency extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public currency_code!: string;
+  currency_code!: string;
 
   @Column({
     type: 'varchar',
     length: 100,
   })
-  public currency_des!: string;
+  currency_des!: string;
 
   @Column({ type: 'uuid' })
-  public country_id!: string;
+  country_id!: string;
 
   @ManyToOne(() => CountryCodes)
   @JoinColumn({ name: 'country_id', referencedColumnName: 'id' })
-  public country: CountryCodes;
+  country: CountryCodes;
 }

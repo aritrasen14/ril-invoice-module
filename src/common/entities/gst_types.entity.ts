@@ -9,5 +9,5 @@ export class GstTypes extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public gst_type_code!: string;
+  gst_type_code!: string;
 }

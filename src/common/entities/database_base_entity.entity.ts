@@ -12,26 +12,26 @@ import {
 
 export class DatabaseBaseEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  public id!: string;
+  id!: string;
 
   @CreateDateColumn({
     type: 'timestamptz',
     update: false,
     default: () => 'CURRENT_TIMESTAMP',
   })
-  public created_at!: Date;
+  created_at!: Date;
 
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  public updated_at!: Date;
+  updated_at!: Date;
 
   @Column({
     type: 'boolean',
     default: true,
   })
-  public is_active: boolean;
+  is_active: boolean;
 
   constructor(props?: Partial<DatabaseBaseEntity>) {
     super();

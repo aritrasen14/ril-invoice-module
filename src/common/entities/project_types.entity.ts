@@ -9,7 +9,7 @@ export class ProjectTypes extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public project_type_code!: string;
+  project_type_code!: string;
 
   @Column({
     type: 'varchar',
@@ -17,5 +17,5 @@ export class ProjectTypes extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public project_type_des!: string;
+  project_type_des!: string;
 }

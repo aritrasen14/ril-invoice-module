@@ -10,7 +10,7 @@ export class Vendor extends DatabaseBaseEntity {
     type: 'varchar',
     length: 255,
   })
-  public vendor_name!: string;
+  vendor_name!: string;
 
   @Column({
     type: 'varchar',
@@ -18,7 +18,7 @@ export class Vendor extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public email!: string;
+  email!: string;
 
   @Column({
     type: 'varchar',
@@ -30,35 +30,35 @@ export class Vendor extends DatabaseBaseEntity {
   @Column({
     type: 'uuid',
   })
-  public user_role_id: string;
+  user_role_id: string;
 
   @ManyToOne(() => UserRoles)
   @JoinColumn({ name: 'user_role_id', referencedColumnName: 'id' })
-  public user_role!: UserRoles;
+  user_role!: UserRoles;
 
   @Column({
     type: 'boolean',
     default: false,
   })
-  public is_verified!: boolean;
+  is_verified!: boolean;
 
   @Column({
     type: 'uuid',
   })
-  public country_code_id!: string;
+  country_code_id!: string;
 
   @ManyToOne(() => CountryCodes)
   @JoinColumn({ name: 'country_code_id', referencedColumnName: 'id' })
-  public country: CountryCodes;
+  country: CountryCodes;
 
   @Column({
     type: 'uuid',
   })
-  public vendor_type_id!: string;
+  vendor_type_id!: string;
 
   @ManyToOne(() => VendorTypes)
   @JoinColumn({ name: 'vendor_type_id', referencedColumnName: 'id' })
-  public vendor_type: VendorTypes;
+  vendor_type: VendorTypes;
 
   @Column({
     type: 'varchar',
@@ -66,5 +66,5 @@ export class Vendor extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public vendor_code!: string;
+  vendor_code!: string;
 }

@@ -9,12 +9,12 @@ export class InvoiceCategories extends DatabaseBaseEntity {
     unique: true,
   })
   @Index({ unique: true })
-  public invoice_category_code!: string;
+  invoice_category_code!: string;
 
   @Column({
     type: 'varchar',
     length: 100,
   })
   @Index({ unique: true })
-  public invoice_category_des!: string;
+  invoice_category_des!: string;
 }
