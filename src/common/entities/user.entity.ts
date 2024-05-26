@@ -1,9 +1,17 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 import { UserRoles } from './user_roles.entity';
+import * as bcrypt from 'bcrypt';
 
-@Entity('access_user')
-export class AccessUser extends DatabaseBaseEntity {
+@Entity('user')
+export class User extends DatabaseBaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
@@ -11,6 +19,13 @@ export class AccessUser extends DatabaseBaseEntity {
   })
   @Index({ unique: true })
   email!: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    select: false,
+  })
+  password!: string;
 
   @Column({ type: 'uuid' })
   user_role_id!: string;
@@ -24,4 +39,10 @@ export class AccessUser extends DatabaseBaseEntity {
     default: false,
   })
   is_verified!: boolean;
+
+  @BeforeInsert()
+  async setPassword(password: string) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(password || this.password, salt);
+  }
 }

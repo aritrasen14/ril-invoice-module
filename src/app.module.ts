@@ -3,13 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { VendorModule } from './Modules/vendor/vendor.module';
-import { TypeOrmSharedModule } from './common/config/db/typeorm.module';
+import { typeOrmAsyncConfig } from './config/db/typeorm.config';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/filters';
 import { InvoiceModule } from './modules/invoice/invoice.module';
 import { UserRoleModule } from './modules/user-roles/user_roles.module';
 import { AttachmentModule } from './modules/attachments/attachments.module';
 import { MasterModule } from './Modules/master/master.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { MasterModule } from './Modules/master/master.module';
     }),
 
     // * Import TypeORM Module
-    TypeOrmSharedModule,
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
 
     // * Import Custom Modules
     MasterModule,

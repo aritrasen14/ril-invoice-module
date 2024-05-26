@@ -18,6 +18,6 @@ export * from './invoice_types.entity';
 export * from './vendor_types.entity';
 export * from './audit_status_detail.entity';
 export * from './project.entity';
-export * from './access_user.entity';
+export * from './user.entity';
 export * from './transaction_logs.entity';
 export * from './currency.entity';
