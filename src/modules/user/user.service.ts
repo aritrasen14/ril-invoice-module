@@ -42,4 +42,11 @@ export class UserService {
 
     return new UserResponseDto(resultQuery);
   }
+
+  async getUserById(id: string): Promise<UserResponseDto> {
+    this.logger.debug('Inside getUserById');
+    const resultQuery = await this.userRepo.findOne({ where: { id } });
+
+    return new UserResponseDto(resultQuery);
+  }
 }

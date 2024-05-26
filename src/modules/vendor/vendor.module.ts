@@ -12,6 +12,6 @@ import { MasterModule } from '../master/master.module';
   ],
   controllers: [VendorController],
   providers: [VendorService],
-  exports: [],
+  exports: [VendorService],
 })
 export class VendorModule {}
