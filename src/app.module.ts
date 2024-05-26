@@ -11,6 +11,7 @@ import { UserRoleModule } from './modules/user-roles/user_roles.module';
 import { AttachmentModule } from './modules/attachments/attachments.module';
 import { MasterModule } from './Modules/master/master.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UserRoleModule,
     VendorModule,
     AttachmentModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
