@@ -35,4 +35,11 @@ export class UserService {
 
     return new UserResponseDto(resultQuery);
   }
+
+  async getUserByEmail(email: string): Promise<UserResponseDto> {
+    this.logger.debug('Inside getUserByEmail');
+    const resultQuery = await this.userRepo.findOne({ where: { email } });
+
+    return new UserResponseDto(resultQuery);
+  }
 }

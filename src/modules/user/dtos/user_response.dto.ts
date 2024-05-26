@@ -8,6 +8,8 @@ export class UserResponseDto extends EntityResponseDto implements IUserRoles {
   constructor(user: User) {
     super();
     this.id = user.id;
+    this.email = user.email;
+    this.password = user.password;
     this.created_at = user.created_at;
     this.updated_at = user.updated_at;
     this.is_active = user.is_active;

@@ -12,6 +12,7 @@ import { AttachmentModule } from './modules/attachments/attachments.module';
 import { MasterModule } from './Modules/master/master.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -25,12 +26,13 @@ import { UserModule } from './modules/user/user.module';
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
 
     // * Import Custom Modules
+    AuthModule,
+    UserModule,
     MasterModule,
     InvoiceModule,
     UserRoleModule,
     VendorModule,
     AttachmentModule,
-    UserModule,
   ],
   controllers: [AppController],
   providers: [
