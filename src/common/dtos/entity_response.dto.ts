@@ -5,14 +5,14 @@ export class EntityResponseDto {
     example: 'cb9f2c82-2910-4766-a634-54502dfb01e1',
     format: 'v4',
   })
-  readonly id: string;
+  id: string;
 
   @ApiResponseProperty()
-  readonly created_at: Date;
+  created_at: Date;
 
   @ApiResponseProperty()
-  readonly updated_at: Date;
+  updated_at: Date;
 
   @ApiResponseProperty()
-  readonly is_active: boolean;
+  is_active: boolean;
 }

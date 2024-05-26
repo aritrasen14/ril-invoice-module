@@ -15,13 +15,17 @@ export class VendorResponseDto
 {
   constructor(vendor: Vendor) {
     super();
+    this.id = vendor.id;
+    this.created_at = vendor.created_at;
+    this.updated_at = vendor.updated_at;
+    this.is_active = vendor.is_active;
     this.vendor_name = vendor.vendor_name;
     this.email = vendor.email;
     this.vendor_code = vendor.vendor_code;
 
     // *  Values Coming from UserRoles
-    this.user_role_code = vendor.user_role?.user_role_code;
     this.user_role_des = vendor.user_role?.user_role_des;
+    this.user_role_code = vendor.user_role?.user_role_code;
 
     // * Values coming from country_codes
     this.country_code = vendor.country?.country_code;

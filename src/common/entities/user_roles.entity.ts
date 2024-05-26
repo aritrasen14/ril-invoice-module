@@ -2,7 +2,6 @@ import { Column, Entity, Index } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 import { USER_ROLES } from '../enums';
 import { ApiProperty } from '@nestjs/swagger';
-
 @Entity('user_roles')
 export class UserRoles extends DatabaseBaseEntity {
   @ApiProperty({

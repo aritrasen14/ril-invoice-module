@@ -16,7 +16,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { VendorService } from './vendor.service';
-import { Vendor } from '../../common/entities';
 import { UUIDValidationPipe } from 'src/Common/pipes';
 import {
   CreateVendorRequestDto,
@@ -43,8 +42,7 @@ export class VendorController {
   })
   async fetchVendors(): Promise<VendorResponseDto[]> {
     this.logger.debug('Inside fetchVendors');
-    const result = await this.vendorService.fetchVendors();
-    return result.map((element) => new VendorResponseDto(element));
+    return await this.vendorService.fetchVendors();
   }
 
   // * Create vendor
@@ -76,7 +74,7 @@ export class VendorController {
   })
   async fetchVendorById(
     @Param('id', UUIDValidationPipe) id: string,
-  ): Promise<Vendor> {
+  ): Promise<VendorResponseDto> {
     this.logger.debug('Inside fetchVendorById');
     return await this.vendorService.fetchVendorById(id);
   }
@@ -94,7 +92,7 @@ export class VendorController {
   async updateVendor(
     @Param('id', UUIDValidationPipe) id: string,
     @Body() body: UpdateVendorRequestDto,
-  ): Promise<Vendor> {
+  ): Promise<VendorResponseDto> {
     this.logger.debug('Inside updateVendor');
     return await this.vendorService.updateVendor(id, body);
   }
