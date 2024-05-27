@@ -1,8 +1,11 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create_user_request.dto';
 import { UserResponseDto } from './dtos/user_response.dto';
+import { Roles } from '../auth/roles.decorator';
+import { USER_ROLES } from 'src/common/enums';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @ApiTags('user')
 @Controller('user')
@@ -12,6 +15,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/')
+  @Roles(
+    USER_ROLES.INVOICE_VALIDATION_TEAM,
+    USER_ROLES.SCROLL_TEAM,
+    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
+  )
+  @UseGuards(RolesGuard)
   @ApiOperation({
     summary: 'Register User',
     operationId: 'registerUser',

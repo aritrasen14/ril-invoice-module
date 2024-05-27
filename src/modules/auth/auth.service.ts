@@ -7,7 +7,7 @@ import {
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/common/entities';
+import { UserResponseDto } from '../user/dtos/user_response.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,11 +34,12 @@ export class AuthService {
     return user;
   }
 
-  generateToken(user: User): { access_token: string } {
+  generateToken(user: UserResponseDto): { access_token: string } {
     this.logger.debug('Inside generateToken');
     return {
       access_token: this.jwtService.sign({
         id: user.id,
+        user_role_code: user.user_role_code,
       }),
     };
   }

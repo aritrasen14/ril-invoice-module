@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiCreatedResponse,
@@ -22,6 +23,10 @@ import {
   UpdateVendorRequestDto,
   VendorResponseDto,
 } from './dtos';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { USER_ROLES } from 'src/common/enums';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('vendor')
 @Controller('vendor')
@@ -31,7 +36,6 @@ export class VendorController {
   constructor(private readonly vendorService: VendorService) {}
 
   // * Fetch all vendors
-  @Get('/')
   @ApiOperation({
     summary: 'Fetch all vendors!',
     operationId: 'fetchVendors',
@@ -40,6 +44,9 @@ export class VendorController {
     description: 'Successfully fetched all vendors!',
     type: [VendorResponseDto],
   })
+  @Get('/')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM, USER_ROLES.VENDOR)
   async fetchVendors(): Promise<VendorResponseDto[]> {
     this.logger.debug('Inside fetchVendors');
     return await this.vendorService.fetchVendors();

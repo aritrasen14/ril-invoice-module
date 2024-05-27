@@ -38,7 +38,10 @@ export class UserService {
 
   async getUserByEmail(email: string): Promise<UserResponseDto> {
     this.logger.debug('Inside getUserByEmail');
-    const resultQuery = await this.userRepo.findOne({ where: { email } });
+    const resultQuery = await this.userRepo.findOne({
+      where: { email },
+      relations: ['user_role'],
+    });
 
     return new UserResponseDto(resultQuery);
   }

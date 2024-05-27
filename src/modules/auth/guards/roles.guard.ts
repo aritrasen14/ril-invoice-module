@@ -1,22 +1,24 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserService } from 'src/modules/user/user.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private userService: UserService,
-  ) {}
+  private readonly logger = new Logger(RolesGuard.name);
+
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     const request = context.switchToHttp().getRequest();
 
     if (request?.user) {
-      const { id } = request.user;
-      const user = await this.userService.getUserById(id);
-      return roles.includes(user.user_role_code);
+      const { user_role_code } = request.user;
+      return roles.includes(user_role_code);
     }
 
     return false;

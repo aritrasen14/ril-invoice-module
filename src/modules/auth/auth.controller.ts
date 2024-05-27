@@ -12,10 +12,6 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoginDto } from './dtos/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import {
-  CustomLoginRequest,
-  CustomUserRequest,
-} from 'src/common/interfaces/request/custom_request.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -36,7 +32,7 @@ export class AuthController {
     // type: [],
   })
   async login(
-    @Request() req: CustomLoginRequest,
+    @Request() req,
     @Body() body: LoginDto,
   ): Promise<{ access_token: string }> {
     this.logger.debug('Inside login', body);
@@ -45,7 +41,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('user')
-  async user(@Request() req: CustomUserRequest): Promise<any> {
+  async user(@Request() req): Promise<any> {
     this.logger.debug('Inside login', req.user);
     return req.user;
   }
