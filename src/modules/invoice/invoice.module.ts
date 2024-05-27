@@ -3,27 +3,28 @@ import { InvoiceController } from './invoice.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   Invoice,
-  InvoiceDetails,
-  InvoiceHeader,
   AdvanceAdjustmentDetails,
   AuditStatusDetails,
   TransactionLogs,
 } from '../../common/entities';
 import { InvoiceService } from './invoice.service';
+import { jwtConfig } from 'src/config/jwt/jwt.config';
+import { JwtModule } from '@nestjs/jwt';
+import { MasterModule } from '../master/master.module';
 
 @Module({
   imports: [
+    JwtModule.registerAsync(jwtConfig),
     TypeOrmModule.forFeature([
       Invoice,
-      InvoiceDetails,
-      InvoiceHeader,
       AdvanceAdjustmentDetails,
       AuditStatusDetails,
       TransactionLogs,
     ]),
+    MasterModule,
   ],
   controllers: [InvoiceController],
   providers: [InvoiceService],
-  exports: [],
+  exports: [InvoiceService],
 })
 export class InvoiceModule {}

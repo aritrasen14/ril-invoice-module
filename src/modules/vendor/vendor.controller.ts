@@ -46,7 +46,11 @@ export class VendorController {
   })
   @Get('/')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM, USER_ROLES.VENDOR)
+  @Roles(
+    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
+    USER_ROLES.INVOICE_VALIDATION_TEAM,
+    USER_ROLES.SCROLL_TEAM,
+  )
   async fetchVendors(): Promise<VendorResponseDto[]> {
     this.logger.debug('Inside fetchVendors');
     return await this.vendorService.fetchVendors();
@@ -54,6 +58,8 @@ export class VendorController {
 
   // * Create vendor
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(USER_ROLES.VENDOR)
   @ApiOperation({
     summary: 'Create a vendor!',
     operationId: 'createVendor',
@@ -71,6 +77,13 @@ export class VendorController {
 
   // * Fetch vendor by Id
   @Get('/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(
+    USER_ROLES.VENDOR,
+    USER_ROLES.INVOICE_VALIDATION_TEAM,
+    USER_ROLES.SCROLL_TEAM,
+    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
+  )
   @ApiOperation({
     summary: 'Fetch vendor by id!',
     operationId: 'fetchVendorById',
@@ -88,6 +101,8 @@ export class VendorController {
 
   // * Update vendor
   @Put('/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(USER_ROLES.VENDOR)
   @ApiOperation({
     summary: 'Update vendor!',
     operationId: 'updateVendor',
@@ -106,6 +121,12 @@ export class VendorController {
 
   // * Delete vendor
   @Delete('/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(
+    USER_ROLES.INVOICE_VALIDATION_TEAM,
+    USER_ROLES.SCROLL_TEAM,
+    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
+  )
   @ApiOperation({
     summary: 'Delete vendor!',
     operationId: 'deleteVendor',
