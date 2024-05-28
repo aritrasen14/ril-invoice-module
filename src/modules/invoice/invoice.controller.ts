@@ -18,7 +18,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { USER_ROLES } from 'src/common/enums';
-import { SubmitInvoiceRequestDto } from './dtos';
+import { InvoiceResponseDto, SubmitInvoiceRequestDto } from './dtos';
 import { UUIDValidationPipe } from 'src/Common/pipes';
 
 @ApiTags('invoice')
@@ -43,10 +43,9 @@ export class InvoiceController {
   })
   @ApiOkResponse({
     description: 'Successfully fetched all invoices!',
-    // type: []
+    type: [InvoiceResponseDto],
   })
-  async fetchInvoices() {
-    //! InvoiceResponseDto
+  async fetchInvoices(): Promise<InvoiceResponseDto[]> {
     this.logger.debug('Inside fetchInvoices');
     return await this.invoiceService.fetchInvoices();
   }
@@ -61,10 +60,11 @@ export class InvoiceController {
   })
   @ApiCreatedResponse({
     description: 'Successfully submitted a invoice!',
-    // type: InvoiceResponseDto,
+    type: InvoiceResponseDto,
   })
-  async submitInvoice(@Body() body: SubmitInvoiceRequestDto) {
-    //! InvoiceResponseDto
+  async submitInvoice(
+    @Body() body: SubmitInvoiceRequestDto,
+  ): Promise<InvoiceResponseDto> {
     this.logger.debug('Inside submitInvoice');
     return await this.invoiceService.submitInvoice(body);
   }
@@ -94,7 +94,7 @@ export class InvoiceController {
   })
   async fetchInvoiceByStatus(
     @Param('id', UUIDValidationPipe) invoiceStatusId: string,
-  ) {
+  ): Promise<InvoiceResponseDto[]> {
     return await this.invoiceService.fetchInvoicesByStatus(invoiceStatusId);
   }
 }

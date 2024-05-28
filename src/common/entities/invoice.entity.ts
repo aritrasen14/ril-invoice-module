@@ -102,7 +102,7 @@ export class Invoice extends DatabaseBaseEntity {
 
   @ManyToOne(() => ProjectTypes)
   @JoinColumn({ name: 'project_type_id', referencedColumnName: 'id' })
-  projectType: ProjectTypes;
+  project_type: ProjectTypes;
 
   @Column({
     type: 'timestamptz',
@@ -195,7 +195,7 @@ export class Invoice extends DatabaseBaseEntity {
   @Column({
     type: 'boolean',
   })
-  delivery_Challan!: boolean;
+  delivery_challan!: boolean;
 
   @Column({
     type: 'boolean',

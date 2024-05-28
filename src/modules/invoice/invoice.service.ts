@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Invoice } from '../../common/entities';
-import { SubmitInvoiceRequestDto } from './dtos';
+import { InvoiceResponseDto, SubmitInvoiceRequestDto } from './dtos';
 import { AttachmentService } from '../attachment/attachment.service';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class InvoiceService {
     'invoice_category',
     'project',
     'company',
-    'projectType',
+    'project_type',
     'vendor',
     'currency',
     'gst_type',
@@ -30,7 +30,9 @@ export class InvoiceService {
   ) {}
 
   // * Submit Invoice
-  async submitInvoice(body: SubmitInvoiceRequestDto) {
+  async submitInvoice(
+    body: SubmitInvoiceRequestDto,
+  ): Promise<InvoiceResponseDto> {
     this.logger.debug('Inside submitInvoice');
 
     const { attachments } = body;
@@ -88,27 +90,34 @@ export class InvoiceService {
   }
 
   // * Fetch invoice by id
-  async fetchInvoiceById(id: string, relations: string[]) {
+  async fetchInvoiceById(
+    id: string,
+    relations: string[],
+  ): Promise<InvoiceResponseDto> {
     this.logger.debug('Inside fetchInvoiceById');
-
-    return await this.invoiceRepo.findOne({
+    const existingInvoice = await this.invoiceRepo.findOne({
       where: { id },
       relations,
     });
+    return new InvoiceResponseDto(existingInvoice);
   }
 
   // * Fetch Invoices
-  async fetchInvoices() {
+  async fetchInvoices(): Promise<InvoiceResponseDto[]> {
     this.logger.debug('Inside fetchAllInvoices');
-    return await this.invoiceRepo.find({ relations: this.relations });
+    const invoices = await this.invoiceRepo.find({ relations: this.relations });
+    return invoices.map((invoice) => new InvoiceResponseDto(invoice));
   }
 
   // * Fetch all invoices by status
-  async fetchInvoicesByStatus(invoiceStatusId: string) {
+  async fetchInvoicesByStatus(
+    invoiceStatusId: string,
+  ): Promise<InvoiceResponseDto[]> {
     this.logger.debug('Inside fetchInvoicesByStatus');
-    return await this.invoiceRepo.find({
+    const invoices = await this.invoiceRepo.find({
       where: { invoice_status_id: invoiceStatusId },
       relations: this.relations,
     });
+    return invoices.map((invoice) => new InvoiceResponseDto(invoice));
   }
 }

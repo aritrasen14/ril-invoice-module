@@ -24,16 +24,16 @@ export class VendorResponseDto
     this.vendor_code = vendor.vendor_code;
 
     // *  Values Coming from UserRoles
-    this.user_role_des = vendor.user_role?.user_role_des;
-    this.user_role_code = vendor.user_role?.user_role_code;
+    this.user_role_des = vendor.user_role?.user_role_des || null;
+    this.user_role_code = vendor.user_role?.user_role_code || null;
 
     // * Values coming from country_codes
-    this.country_code = vendor.country?.country_code;
-    this.country_name = vendor.country?.country_name;
+    this.country_code = vendor.country?.country_code || null;
+    this.country_name = vendor.country?.country_name || null;
 
     // * Values coming from vendor_types
-    this.vendor_type_code = vendor.vendor_type?.vendor_type_code;
-    this.vendor_type_des = vendor.vendor_type?.vendor_type_des;
+    this.vendor_type_code = vendor.vendor_type?.vendor_type_code || null;
+    this.vendor_type_des = vendor.vendor_type?.vendor_type_des || null;
   }
 
   @ApiResponseProperty({

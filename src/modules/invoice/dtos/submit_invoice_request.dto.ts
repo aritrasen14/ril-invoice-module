@@ -116,7 +116,7 @@ export class SubmitInvoiceRequestDto {
   })
   @IsDefined()
   @IsBoolean()
-  delivery_Challan: boolean;
+  delivery_challan: boolean;
 
   @ApiProperty({
     type: Boolean,

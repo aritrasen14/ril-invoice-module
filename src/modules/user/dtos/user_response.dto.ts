@@ -16,8 +16,8 @@ export class UserResponseDto extends EntityResponseDto implements IUserRoles {
     this.is_verified = user.is_verified;
 
     // *  Values Coming from UserRoles
-    this.user_role_des = user.user_role?.user_role_des;
-    this.user_role_code = user.user_role?.user_role_code;
+    this.user_role_des = user.user_role?.user_role_des || null;
+    this.user_role_code = user.user_role?.user_role_code || null;
   }
 
   @ApiResponseProperty({
