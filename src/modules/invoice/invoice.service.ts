@@ -4,6 +4,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Invoice } from '../../common/entities';
 import { InvoiceResponseDto, SubmitInvoiceRequestDto } from './dtos';
 import { AttachmentService } from '../attachment/attachment.service';
+import { TransactionLogsService } from '../transaction-logs/transaction-logs.service';
 
 @Injectable()
 export class InvoiceService {
@@ -26,6 +27,7 @@ export class InvoiceService {
     @InjectRepository(Invoice)
     private readonly invoiceRepo: Repository<Invoice>,
     private readonly attachmentService: AttachmentService,
+    private readonly transactionLogs: TransactionLogsService,
     private dataSource: DataSource,
   ) {}
 
@@ -43,6 +45,7 @@ export class InvoiceService {
     await queryRunner.startTransaction();
 
     try {
+      // * Generating the Request No
       const lastInvoice = await this.invoiceRepo.find({
         order: { request_no: 'DESC' },
       });
@@ -62,6 +65,7 @@ export class InvoiceService {
         request_no: `PR${lastNumber}`,
       });
 
+      // * Adding the attachments
       const promisedAttachments = attachments.map(async (attachment) => {
         return await this.attachmentService.createAttachment(
           {
@@ -73,6 +77,16 @@ export class InvoiceService {
       });
 
       await Promise.all(promisedAttachments);
+
+      // * Add the transaction-logs
+      await this.transactionLogs.createTransactionLogs(
+        {
+          invoice_id: newlyGeneratedInvoice.id,
+          status_id: body.invoice_status_id,
+        },
+        queryRunner,
+      );
+
       await queryRunner.commitTransaction();
 
       const newlyGeneratedInvoiceDetails = await this.fetchInvoiceById(

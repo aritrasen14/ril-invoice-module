@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserAccessStatusModule } from './modules/user-access-status/user-access-status.module';
+import { TransactionLogsModule } from './modules/transaction-logs/transaction-logs.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { UserAccessStatusModule } from './modules/user-access-status/user-access
     VendorModule,
     AttachmentModule,
     UserAccessStatusModule,
+    TransactionLogsModule,
   ],
   controllers: [AppController],
   providers: [
