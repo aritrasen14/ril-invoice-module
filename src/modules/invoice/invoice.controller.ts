@@ -29,14 +29,6 @@ export class InvoiceController {
   constructor(private readonly invoiceService: InvoiceService) {}
 
   // * Fetch all invoices
-  @ApiOperation({
-    summary: 'Fetch all invoices!',
-    operationId: 'fetchInvoices',
-  })
-  @ApiOkResponse({
-    description: 'Successfully fetched all invoices!',
-    // type: []
-  })
   @Get('/')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
@@ -45,6 +37,14 @@ export class InvoiceController {
     USER_ROLES.SCROLL_TEAM,
     USER_ROLES.VENDOR,
   )
+  @ApiOperation({
+    summary: 'Fetch all invoices!',
+    operationId: 'fetchInvoices',
+  })
+  @ApiOkResponse({
+    description: 'Successfully fetched all invoices!',
+    // type: []
+  })
   async fetchInvoices() {
     //! InvoiceResponseDto
     this.logger.debug('Inside fetchInvoices');

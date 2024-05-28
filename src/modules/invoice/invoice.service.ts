@@ -9,7 +9,7 @@ import { AttachmentService } from '../attachment/attachment.service';
 export class InvoiceService {
   private readonly logger = new Logger(InvoiceService.name);
 
-  // * storing the relations in the property to
+  // * storing the relations in the property to reduce redundancy
   private readonly relations = [
     'invoice_type',
     'invoice_status',

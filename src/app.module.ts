@@ -13,6 +13,7 @@ import { MasterModule } from './Modules/master/master.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { UserAccessStatusModule } from './modules/user-access-status/user-access-status.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AuthModule } from './modules/auth/auth.module';
     UserRoleModule,
     VendorModule,
     AttachmentModule,
+    UserAccessStatusModule,
   ],
   controllers: [AppController],
   providers: [

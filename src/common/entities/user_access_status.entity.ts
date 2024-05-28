@@ -12,12 +12,6 @@ export class UserAccessStatus extends DatabaseBaseEntity {
   @JoinColumn({ name: 'user_role_id', referencedColumnName: 'id' })
   user_role!: UserRoles;
 
-  @Column({
-    type: 'varchar',
-    length: 36,
-  })
-  invoice_status_code!: string;
-
   @Column({ type: 'uuid' })
   invoice_status_id!: string;
 
