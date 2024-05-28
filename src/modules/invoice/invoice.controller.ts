@@ -39,7 +39,7 @@ export class InvoiceController {
   async fetchInvoices() {
     //! InvoiceResponseDto
     this.logger.debug('Inside fetchInvoices');
-    return await this.invoiceService.fetchAllInvoices();
+    return await this.invoiceService.fetchInvoices();
   }
 
   // * Submit a invoice

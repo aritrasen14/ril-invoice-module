@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Invoice } from '../../common/entities';
 import { SubmitInvoiceRequestDto } from './dtos';
 import { AttachmentService } from '../attachment/attachment.service';
@@ -26,12 +26,8 @@ export class InvoiceService {
     @InjectRepository(Invoice)
     private readonly invoiceRepo: Repository<Invoice>,
     private readonly attachmentService: AttachmentService,
+    private dataSource: DataSource,
   ) {}
-
-  // * Fetch all invoices
-  async fetchInvoices() {
-    this.logger.debug('Inside fetchInvoices');
-  }
 
   // * Submit Invoice
   async submitInvoice(body: SubmitInvoiceRequestDto) {
@@ -39,42 +35,57 @@ export class InvoiceService {
 
     const { attachments } = body;
 
-    const lastInvoice = await this.invoiceRepo.find({
-      order: { request_no: 'DESC' },
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    let lastNumber = 1000000;
-    if (lastInvoice.length > 0) {
-      const lastRequestNo = lastInvoice[0].request_no;
-      const lastRequestNoNumeric = parseInt(
-        lastRequestNo.replace('PR', ''),
-        10,
-      );
-      lastNumber = lastRequestNoNumeric + 1;
-    }
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const newInvoice = this.invoiceRepo.create({
-      ...body,
-      request_no: `PR${lastNumber}`,
-    });
-
-    const newlyGeneratedInvoice = await this.invoiceRepo.save(newInvoice);
-
-    const promisedAttachments = attachments.map(async (attachment) => {
-      return await this.attachmentService.createAttachment({
-        ...attachment,
-        invoice_id: newlyGeneratedInvoice.id,
+    try {
+      const lastInvoice = await this.invoiceRepo.find({
+        order: { request_no: 'DESC' },
       });
-    });
 
-    await Promise.all(promisedAttachments);
+      let lastNumber = 1000000;
+      if (lastInvoice.length > 0) {
+        const lastRequestNo = lastInvoice[0].request_no;
+        const lastRequestNoNumeric = parseInt(
+          lastRequestNo.replace('PR', ''),
+          10,
+        );
+        lastNumber = lastRequestNoNumeric + 1;
+      }
 
-    const newlyGeneratedInvoiceDetails = await this.fetchInvoiceById(
-      newlyGeneratedInvoice.id,
-      this.relations,
-    );
+      const newlyGeneratedInvoice = await queryRunner.manager.save(Invoice, {
+        ...body,
+        request_no: `PR${lastNumber}`,
+      });
 
-    return newlyGeneratedInvoiceDetails;
+      const promisedAttachments = attachments.map(async (attachment) => {
+        return await this.attachmentService.createAttachment(
+          {
+            ...attachment,
+            invoice_id: newlyGeneratedInvoice.id,
+          },
+          queryRunner,
+        );
+      });
+
+      await Promise.all(promisedAttachments);
+
+      const newlyGeneratedInvoiceDetails = await this.fetchInvoiceById(
+        newlyGeneratedInvoice.id,
+        this.relations,
+      );
+
+      await queryRunner.commitTransaction();
+
+      return newlyGeneratedInvoiceDetails;
+    } catch (err) {
+      this.logger.error('Error in submitInvoice', err);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   // * Fetch invoice by id
@@ -87,8 +98,8 @@ export class InvoiceService {
     });
   }
 
-  // * Fetch all Invoices
-  async fetchAllInvoices() {
+  // * Fetch Invoices
+  async fetchInvoices() {
     this.logger.debug('Inside fetchAllInvoices');
     return await this.invoiceRepo.find({ relations: this.relations });
   }

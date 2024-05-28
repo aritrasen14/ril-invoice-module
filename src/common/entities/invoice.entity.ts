@@ -62,24 +62,12 @@ export class Invoice extends DatabaseBaseEntity {
   })
   invoice_date!: Date;
 
-  // @Column({
-  //   type: 'varchar',
-  // })
-  // @Index()
-  // vendor_code!: string;
-
   @Column({ type: 'uuid' })
   invoice_status_id!: string;
 
   @ManyToOne(() => InvoiceStatus)
   @JoinColumn({ name: 'invoice_status_id', referencedColumnName: 'id' })
   invoice_status!: InvoiceStatus;
-
-  // @Column({
-  //   type: 'varchar',
-  //   length: 255,
-  // })
-  // invoice_category_code!: string;
 
   @Column({ type: 'uuid' })
   invoice_category_id!: string;

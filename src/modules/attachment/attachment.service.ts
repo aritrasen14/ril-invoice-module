@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Attachment } from 'src/common/entities';
-import { Repository } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 
 @Injectable()
 export class AttachmentService {
@@ -10,12 +10,7 @@ export class AttachmentService {
     private readonly attachmentRepo: Repository<Attachment>,
   ) {}
 
-  async createAttachment(attachment) {
-    const newAttachment = this.attachmentRepo.create(attachment);
-
-    const newlyGeneratedAttachment =
-      await this.attachmentRepo.save(newAttachment);
-
-    return newlyGeneratedAttachment;
+  async createAttachment(attachment, queryRunner: QueryRunner) {
+    return await queryRunner.manager.save(Attachment, attachment);
   }
 }

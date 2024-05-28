@@ -3,6 +3,7 @@ import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 export default class TypeOrmConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
@@ -31,4 +32,10 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     configService: ConfigService,
   ): Promise<TypeOrmModuleOptions> => TypeOrmConfig.getOrmConfig(configService),
   inject: [ConfigService],
+  // dataSource receives the configured DataSourceOptions
+  // and returns a Promise<DataSource>.
+  dataSourceFactory: async (options) => {
+    const dataSource = await new DataSource(options).initialize();
+    return dataSource;
+  },
 };
