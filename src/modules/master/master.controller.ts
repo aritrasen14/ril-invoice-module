@@ -1,15 +1,17 @@
 import { Controller, Get, Logger, UseGuards } from '@nestjs/common';
 import { MasterService } from './master.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/roles.decorator';
-import { USER_ROLES } from 'src/common/enums';
 import {
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import {
+  CurrenciesResponseDto,
+  GstTypesResponseDto,
+  InvoiceTypesResponseDto,
+} from './dtos/master.response';
 
 @ApiTags('master')
 @Controller('master')
@@ -19,65 +21,47 @@ export class MasterController {
   constructor(private readonly masterService: MasterService) {}
 
   @Get('/currency')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(
-    USER_ROLES.VENDOR,
-    USER_ROLES.INVOICE_VALIDATION_TEAM,
-    USER_ROLES.SCROLL_TEAM,
-    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
-  )
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: 'Fetch currencies!',
     operationId: 'fetchCurrencies',
   })
   @ApiResponse({
     description: 'Successfully fetched currencies!',
-    // type: CurrencyResponseDto
+    type: [CurrenciesResponseDto],
   })
-  async fetchCurrencies() {
+  async fetchCurrencies(): Promise<CurrenciesResponseDto[]> {
     this.logger.debug('Inside fetchCurrencies');
     return await this.masterService.fetchCurrencies();
   }
 
   // * Fetch all invoice types
   @Get('/invoice-types')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(
-    USER_ROLES.VENDOR,
-    USER_ROLES.SCROLL_TEAM,
-    USER_ROLES.INVOICE_VALIDATION_TEAM,
-    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
-  )
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: 'Fetch invoice types',
     operationId: 'fetchInvoiceTypes',
   })
   @ApiOkResponse({
     description: 'Successfully fetched invoice-types!',
-    // type: InvoiceTypeResponseDto
+    type: [InvoiceTypesResponseDto],
   })
-  async fetchInvoiceTypes() {
+  async fetchInvoiceTypes(): Promise<InvoiceTypesResponseDto[]> {
     return await this.masterService.fetchInvoiceTypes();
   }
 
   // * Fetch all gst types
   @Get('/gst-types')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(
-    USER_ROLES.VENDOR,
-    USER_ROLES.SCROLL_TEAM,
-    USER_ROLES.INVOICE_VALIDATION_TEAM,
-    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
-  )
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: 'Fetch gst types',
     operationId: 'fetchGstTypes',
   })
   @ApiOkResponse({
     description: 'Successfully fetched gst-types!',
-    // type: GstTypeResponseDto
+    type: [GstTypesResponseDto],
   })
-  async fetchGstTypes() {
+  async fetchGstTypes(): Promise<GstTypesResponseDto[]> {
     return await this.masterService.fetchGstTypes();
   }
 }

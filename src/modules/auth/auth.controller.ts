@@ -10,8 +10,8 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { LoginDto } from './dtos/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LoginDto, CurrentUserResponse, LoginResponseDto } from './dtos';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -29,7 +29,7 @@ export class AuthController {
   })
   @ApiOkResponse({
     description: 'Successfully logged in user!',
-    // type: [],
+    type: LoginResponseDto,
   })
   async login(
     @Request() req,
@@ -41,6 +41,14 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('user')
+  @ApiOperation({
+    summary: 'Get Current User',
+    operationId: 'getCurrentUser',
+  })
+  @ApiOkResponse({
+    description: 'Successfully get current user details!',
+    type: CurrentUserResponse,
+  })
   async user(@Request() req): Promise<any> {
     this.logger.debug('Inside login', req.user);
     return req.user;

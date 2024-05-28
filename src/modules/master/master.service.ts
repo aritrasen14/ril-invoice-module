@@ -2,6 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Currency, GstTypes, InvoiceTypes } from 'src/common/entities';
 import { Repository } from 'typeorm';
+import {
+  CurrenciesResponseDto,
+  GstTypesResponseDto,
+  InvoiceTypesResponseDto,
+} from './dtos/master.response';
 
 @Injectable()
 export class MasterService {
@@ -17,20 +22,25 @@ export class MasterService {
   ) {}
 
   // * Fetch all invoice-types
-  async fetchInvoiceTypes() {
+  async fetchInvoiceTypes(): Promise<InvoiceTypesResponseDto[]> {
     this.logger.debug('Inside fetchInvoiceTypes');
-    return await this.invoiceTypeRepo.find();
+    const invoiceTypes = await this.invoiceTypeRepo.find();
+    return invoiceTypes.map(
+      (invoiceType) => new InvoiceTypesResponseDto(invoiceType),
+    );
   }
 
   // * Fetch all currencies
-  async fetchCurrencies() {
+  async fetchCurrencies(): Promise<CurrenciesResponseDto[]> {
     this.logger.debug('Inside fetchCurrencies');
-    return await this.currencyRepo.find();
+    const countries = await this.currencyRepo.find({ relations: ['country'] });
+    return countries.map((country) => new CurrenciesResponseDto(country));
   }
 
   // * Fetch all gst-types
-  async fetchGstTypes() {
+  async fetchGstTypes(): Promise<GstTypesResponseDto[]> {
     this.logger.debug('Inside fetchGstTypes');
-    return await this.gstTypesRepo.find();
+    const gstTypes = await this.gstTypesRepo.find();
+    return gstTypes.map((gstType) => new GstTypesResponseDto(gstType));
   }
 }
