@@ -12,6 +12,13 @@ import {
 export class VendorService {
   private readonly logger = new Logger(VendorService.name);
 
+  // *  Define readonly relations property to reduce redundancy
+  private readonly relations: string[] = [
+    'user_role',
+    'country',
+    'vendor_type',
+  ];
+
   constructor(
     @InjectRepository(Vendor)
     private vendorRepo: Repository<Vendor>,
@@ -20,7 +27,7 @@ export class VendorService {
   async fetchVendors(): Promise<VendorResponseDto[]> {
     this.logger.debug('Inside fetchVendors');
     const resultQuery = await this.vendorRepo.find({
-      relations: ['user_role', 'country', 'vendor_type'],
+      relations: this.relations,
     });
 
     // return await this.vendorRepo
@@ -55,7 +62,7 @@ export class VendorService {
     this.logger.debug('Inside fetchVendorById');
     const resultQuery = await this.vendorRepo.findOne({
       where: { id },
-      relations: ['user_role', 'country', 'vendor_type'],
+      relations: this.relations,
     });
 
     return new VendorResponseDto(resultQuery);

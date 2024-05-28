@@ -50,6 +50,7 @@ export class VendorController {
     USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
     USER_ROLES.INVOICE_VALIDATION_TEAM,
     USER_ROLES.SCROLL_TEAM,
+    USER_ROLES.VENDOR,
   )
   async fetchVendors(): Promise<VendorResponseDto[]> {
     this.logger.debug('Inside fetchVendors');

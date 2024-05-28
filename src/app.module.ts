@@ -8,7 +8,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/filters';
 import { InvoiceModule } from './modules/invoice/invoice.module';
 import { UserRoleModule } from './modules/user-roles/user_roles.module';
-import { AttachmentModule } from './modules/attachments/attachments.module';
+import { AttachmentModule } from './modules/attachment/attachment.module';
 import { MasterModule } from './Modules/master/master.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
 import { AttachmentTypes } from './attachment_types.entity';
 import { Invoice } from './invoice.entity';
@@ -25,6 +25,7 @@ export class Attachment extends DatabaseBaseEntity {
   file_path!: string;
 
   @Column({ type: 'uuid' })
+  @Index()
   invoice_id!: string;
 
   @ManyToOne(() => Invoice)

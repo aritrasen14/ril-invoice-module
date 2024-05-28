@@ -6,11 +6,13 @@ import {
   AdvanceAdjustmentDetails,
   AuditStatusDetails,
   TransactionLogs,
+  Attachment,
 } from '../../common/entities';
 import { InvoiceService } from './invoice.service';
 import { jwtConfig } from 'src/config/jwt/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { MasterModule } from '../master/master.module';
+import { AttachmentModule } from '../attachment/attachment.module';
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { MasterModule } from '../master/master.module';
       AdvanceAdjustmentDetails,
       AuditStatusDetails,
       TransactionLogs,
+      Attachment,
     ]),
+    AttachmentModule,
     MasterModule,
   ],
   controllers: [InvoiceController],

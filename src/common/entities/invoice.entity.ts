@@ -52,7 +52,6 @@ export class Invoice extends DatabaseBaseEntity {
 
   @Column({
     type: 'numeric',
-
     nullable: true,
   })
   invoice_amount: number;
