@@ -12,6 +12,8 @@ import {
   ProjectTypes,
   Currency,
 } from 'src/common/entities';
+import { MasterController } from './master.controller';
+import { MasterService } from './master.service';
 
 @Module({
   imports: [
@@ -28,5 +30,8 @@ import {
       Currency,
     ]),
   ],
+  controllers: [MasterController],
+  providers: [MasterService],
+  exports: [MasterService],
 })
 export class MasterModule {}

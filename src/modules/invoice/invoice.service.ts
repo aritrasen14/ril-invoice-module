@@ -71,13 +71,12 @@ export class InvoiceService {
       });
 
       await Promise.all(promisedAttachments);
+      await queryRunner.commitTransaction();
 
       const newlyGeneratedInvoiceDetails = await this.fetchInvoiceById(
         newlyGeneratedInvoice.id,
         this.relations,
       );
-
-      await queryRunner.commitTransaction();
 
       return newlyGeneratedInvoiceDetails;
     } catch (err) {
@@ -102,5 +101,14 @@ export class InvoiceService {
   async fetchInvoices() {
     this.logger.debug('Inside fetchAllInvoices');
     return await this.invoiceRepo.find({ relations: this.relations });
+  }
+
+  // * Fetch all invoices by status
+  async fetchInvoicesByStatus(invoiceStatusId: string) {
+    this.logger.debug('Inside fetchInvoicesByStatus');
+    return await this.invoiceRepo.find({
+      where: { invoice_status_id: invoiceStatusId },
+      relations: this.relations,
+    });
   }
 }
