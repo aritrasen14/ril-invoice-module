@@ -69,14 +69,14 @@ export class InvoiceService {
       }
 
       // * Adding ST GENERATED Invoice Status
-      const invoice_status_id =
+      const invoice_status =
         await this.masterService.fetchInvoiceStatusWithCode(
           INVOICE_STATUS.ST_GENERATED,
         );
 
       const newlyGeneratedInvoice = await queryRunner.manager.save(Invoice, {
         ...body,
-        invoice_status_id,
+        invoice_status_id: invoice_status.id,
         request_no: `PR${lastNumber}`,
       });
 
@@ -97,7 +97,7 @@ export class InvoiceService {
       await this.transactionLogsService.createTransactionLogs(
         {
           invoice_id: newlyGeneratedInvoice.id,
-          status_id: invoice_status_id,
+          status_id: invoice_status.id,
         },
         queryRunner,
       );

@@ -10,6 +10,7 @@ import {
 import {
   CurrenciesResponseDto,
   GstTypesResponseDto,
+  InvoiceStatusesResponseDto,
   InvoiceTypesResponseDto,
 } from './dtos/master.response';
 
@@ -63,5 +64,20 @@ export class MasterController {
   })
   async fetchGstTypes(): Promise<GstTypesResponseDto[]> {
     return await this.masterService.fetchGstTypes();
+  }
+
+  // * Fetch all invoice statuses
+  @Get('/invoice-status')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: 'Fetch invoice statues',
+    operationId: 'fetchInvoiceStatues',
+  })
+  @ApiOkResponse({
+    description: 'Successfully fetched invoice-statues!',
+    type: [InvoiceStatusesResponseDto],
+  })
+  async fetchInvoiceStatuses(): Promise<InvoiceStatusesResponseDto[]> {
+    return await this.masterService.fetchInvoiceStatuses();
   }
 }
