@@ -16,6 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserAccessStatusModule } from './modules/user-access-status/user-access-status.module';
 import { TransactionLogsModule } from './modules/transaction-logs/transaction-logs.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     AttachmentModule,
     UserAccessStatusModule,
     TransactionLogsModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [
