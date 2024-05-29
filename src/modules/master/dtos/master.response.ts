@@ -1,7 +1,12 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { EntityResponseDto } from 'src/common/dtos';
-import { Currency, GstTypes, InvoiceTypes } from 'src/common/entities';
-import { ICountry } from 'src/common/interfaces';
+import {
+  Currency,
+  GstTypes,
+  InvoiceStatus,
+  InvoiceTypes,
+} from 'src/common/entities';
+import { ICountry, IInvoiceStatus } from 'src/common/interfaces';
 
 export class InvoiceTypesResponseDto extends EntityResponseDto {
   constructor(invoiceType: InvoiceTypes) {
@@ -79,4 +84,29 @@ export class GstTypesResponseDto extends EntityResponseDto {
     example: 'CGST',
   })
   readonly gst_type_code: string;
+}
+
+export class InvoiceStatusesResponseDto
+  extends EntityResponseDto
+  implements IInvoiceStatus
+{
+  constructor(invoiceStatus: InvoiceStatus) {
+    super();
+    this.id = invoiceStatus.id;
+    this.created_at = invoiceStatus.created_at;
+    this.updated_at = invoiceStatus.updated_at;
+    this.is_active = invoiceStatus.is_active;
+
+    this.invoice_sts_code = invoiceStatus.invoice_sts_code;
+    this.invoice_sts_des = invoiceStatus.invoice_sts_des;
+  }
+  @ApiResponseProperty({
+    example: 'STS',
+  })
+  readonly invoice_sts_code: string;
+
+  @ApiResponseProperty({
+    example: 'ST SUBMITTED',
+  })
+  readonly invoice_sts_des: string;
 }

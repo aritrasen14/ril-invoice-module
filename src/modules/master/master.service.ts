@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import {
   CurrenciesResponseDto,
   GstTypesResponseDto,
+  InvoiceStatusesResponseDto,
   InvoiceTypesResponseDto,
 } from './dtos/master.response';
 import { INVOICE_STATUS } from 'src/common/enums';
@@ -26,7 +27,7 @@ export class MasterService {
     @InjectRepository(GstTypes)
     private readonly gstTypesRepo: Repository<GstTypes>,
     @InjectRepository(InvoiceStatus)
-    private readonly invoiceStatus: Repository<InvoiceStatus>,
+    private readonly invoiceStatusRepo: Repository<InvoiceStatus>,
   ) {}
 
   // * Fetch all invoice-types
@@ -35,6 +36,15 @@ export class MasterService {
     const invoiceTypes = await this.invoiceTypeRepo.find();
     return invoiceTypes.map(
       (invoiceType) => new InvoiceTypesResponseDto(invoiceType),
+    );
+  }
+
+  // * Fetch all invoice-statuses
+  async fetchInvoiceStatuses(): Promise<InvoiceStatusesResponseDto[]> {
+    this.logger.debug('Inside fetchInvoiceStatuses');
+    const invoiceStatues = await this.invoiceStatusRepo.find();
+    return invoiceStatues.map(
+      (invoiceStatus) => new InvoiceStatusesResponseDto(invoiceStatus),
     );
   }
 
@@ -53,13 +63,15 @@ export class MasterService {
   }
 
   // * Fetch invoice-status with code
-  async fetchInvoiceStatusWithCode(statusCode: INVOICE_STATUS): Promise<any> {
+  async fetchInvoiceStatusWithCode(
+    statusCode: INVOICE_STATUS,
+  ): Promise<InvoiceStatusesResponseDto> {
     this.logger.debug('Inside fetchInvoiceStatusWithCode');
-    const invoiceStatus = await this.invoiceStatus.findOne({
+    const invoiceStatus = await this.invoiceStatusRepo.findOne({
       where: {
         invoice_sts_code: statusCode,
       },
     });
-    return invoiceStatus;
+    return new InvoiceStatusesResponseDto(invoiceStatus);
   }
 }
