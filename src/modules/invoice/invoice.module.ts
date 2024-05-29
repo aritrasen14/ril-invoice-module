@@ -13,6 +13,7 @@ import { jwtConfig } from 'src/config/jwt/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { AttachmentModule } from '../attachment/attachment.module';
 import { TransactionLogsModule } from '../transaction-logs/transaction-logs.module';
+import { MasterModule } from '../master/master.module';
 
 @Module({
   imports: [
@@ -23,10 +24,10 @@ import { TransactionLogsModule } from '../transaction-logs/transaction-logs.modu
       AuditStatusDetails,
       TransactionLogs,
       Attachment,
-      TransactionLogs,
     ]),
     AttachmentModule,
     TransactionLogsModule,
+    MasterModule,
   ],
   controllers: [InvoiceController],
   providers: [InvoiceService],

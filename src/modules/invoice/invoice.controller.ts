@@ -5,6 +5,7 @@ import {
   Logger,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -20,6 +21,10 @@ import { Roles } from '../auth/roles.decorator';
 import { USER_ROLES } from 'src/common/enums';
 import { InvoiceResponseDto, SubmitInvoiceRequestDto } from './dtos';
 import { UUIDValidationPipe } from 'src/Common/pipes';
+import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
+// * Custom decorator for handling pagination
+import { ApiPaginatedResponse } from 'src/common/decorators';
+import { PaginationQuery } from 'src/common/decorators/pagination-query.dto';
 
 @ApiTags('invoice')
 @Controller('invoice')
@@ -41,13 +46,20 @@ export class InvoiceController {
     summary: 'Fetch all invoices!',
     operationId: 'fetchInvoices',
   })
-  @ApiOkResponse({
-    description: 'Successfully fetched all invoices!',
-    type: [InvoiceResponseDto],
+  @ApiPaginatedResponse({
+    model: InvoiceResponseDto,
+    description: 'List of Invoices!',
   })
-  async fetchInvoices(): Promise<InvoiceResponseDto[]> {
+  async fetchInvoices(
+    @Query() query: PaginationQuery,
+  ): Promise<Pagination<InvoiceResponseDto>> {
     this.logger.debug('Inside fetchInvoices');
-    return await this.invoiceService.fetchInvoices();
+
+    const options: IPaginationOptions = {
+      limit: query.limit,
+      page: query.page,
+    };
+    return await this.invoiceService.paginate(options);
   }
 
   // * Submit a invoice
@@ -70,6 +82,22 @@ export class InvoiceController {
   }
 
   // * Fetch invoice by Id
+  @Get('/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(
+    USER_ROLES.VENDOR,
+    USER_ROLES.SCROLL_TEAM,
+    USER_ROLES.INVOICE_VALIDATION_TEAM,
+    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
+  )
+  @ApiOkResponse({
+    description: 'Successfully fetched invoice!',
+  })
+  async fetchInvoiceById(
+    @Param('id', UUIDValidationPipe) id: string,
+  ): Promise<InvoiceResponseDto> {
+    return await this.invoiceService.fetchInvoiceById(id);
+  }
 
   // * Update invoice
 
@@ -90,7 +118,7 @@ export class InvoiceController {
   })
   @ApiOkResponse({
     description: 'Successfully fetched invoices by status!',
-    // type: InvoiceResponseDto,
+    type: [InvoiceResponseDto],
   })
   async fetchInvoiceByStatus(
     @Param('id', UUIDValidationPipe) invoiceStatusId: string,

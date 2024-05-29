@@ -35,7 +35,7 @@ export class AuthController {
     @Request() req,
     @Body() body: LoginDto,
   ): Promise<{ access_token: string }> {
-    this.logger.debug('Inside login', body);
+    this.logger.debug('Inside login');
     return this.authService.generateToken(req.user);
   }
 

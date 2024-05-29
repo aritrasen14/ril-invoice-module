@@ -1,10 +1,17 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Invoice } from '../../common/entities';
 import { InvoiceResponseDto, SubmitInvoiceRequestDto } from './dtos';
 import { AttachmentService } from '../attachment/attachment.service';
 import { TransactionLogsService } from '../transaction-logs/transaction-logs.service';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
+import { MasterService } from '../master/master.service';
+import { INVOICE_STATUS } from 'src/common/enums';
 
 @Injectable()
 export class InvoiceService {
@@ -27,7 +34,8 @@ export class InvoiceService {
     @InjectRepository(Invoice)
     private readonly invoiceRepo: Repository<Invoice>,
     private readonly attachmentService: AttachmentService,
-    private readonly transactionLogs: TransactionLogsService,
+    private readonly transactionLogsService: TransactionLogsService,
+    private readonly masterService: MasterService,
     private dataSource: DataSource,
   ) {}
 
@@ -60,8 +68,15 @@ export class InvoiceService {
         lastNumber = lastRequestNoNumeric + 1;
       }
 
+      // * Adding ST GENERATED Invoice Status
+      const invoice_status_id =
+        await this.masterService.fetchInvoiceStatusWithCode(
+          INVOICE_STATUS.ST_GENERATED,
+        );
+
       const newlyGeneratedInvoice = await queryRunner.manager.save(Invoice, {
         ...body,
+        invoice_status_id,
         request_no: `PR${lastNumber}`,
       });
 
@@ -79,10 +94,10 @@ export class InvoiceService {
       await Promise.all(promisedAttachments);
 
       // * Add the transaction-logs
-      await this.transactionLogs.createTransactionLogs(
+      await this.transactionLogsService.createTransactionLogs(
         {
           invoice_id: newlyGeneratedInvoice.id,
-          status_id: body.invoice_status_id,
+          status_id: invoice_status_id,
         },
         queryRunner,
       );
@@ -91,7 +106,6 @@ export class InvoiceService {
 
       const newlyGeneratedInvoiceDetails = await this.fetchInvoiceById(
         newlyGeneratedInvoice.id,
-        this.relations,
       );
 
       return newlyGeneratedInvoiceDetails;
@@ -104,15 +118,20 @@ export class InvoiceService {
   }
 
   // * Fetch invoice by id
-  async fetchInvoiceById(
-    id: string,
-    relations: string[],
-  ): Promise<InvoiceResponseDto> {
+  async fetchInvoiceById(id: string): Promise<InvoiceResponseDto> {
     this.logger.debug('Inside fetchInvoiceById');
     const existingInvoice = await this.invoiceRepo.findOne({
       where: { id },
-      relations,
+      relations: this.relations,
     });
+
+    if (!existingInvoice) {
+      throw new NotFoundException('No invoice found', {
+        cause: 'db',
+        description: 'No invoice found!',
+      });
+    }
+
     return new InvoiceResponseDto(existingInvoice);
   }
 
@@ -133,5 +152,16 @@ export class InvoiceService {
       relations: this.relations,
     });
     return invoices.map((invoice) => new InvoiceResponseDto(invoice));
+  }
+
+  // * Method for Pagination
+  async paginate(
+    options: IPaginationOptions,
+  ): Promise<Pagination<InvoiceResponseDto>> {
+    const invoices = await paginate<Invoice>(this.invoiceRepo, options);
+    return {
+      items: invoices.items.map((invoice) => new InvoiceResponseDto(invoice)),
+      meta: invoices.meta,
+    };
   }
 }

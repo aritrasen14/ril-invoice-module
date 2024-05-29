@@ -1,12 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Currency, GstTypes, InvoiceTypes } from 'src/common/entities';
+import {
+  Currency,
+  GstTypes,
+  InvoiceStatus,
+  InvoiceTypes,
+} from 'src/common/entities';
 import { Repository } from 'typeorm';
 import {
   CurrenciesResponseDto,
   GstTypesResponseDto,
   InvoiceTypesResponseDto,
 } from './dtos/master.response';
+import { INVOICE_STATUS } from 'src/common/enums';
 
 @Injectable()
 export class MasterService {
@@ -19,6 +25,8 @@ export class MasterService {
     private readonly currencyRepo: Repository<Currency>,
     @InjectRepository(GstTypes)
     private readonly gstTypesRepo: Repository<GstTypes>,
+    @InjectRepository(InvoiceStatus)
+    private readonly invoiceStatus: Repository<InvoiceStatus>,
   ) {}
 
   // * Fetch all invoice-types
@@ -42,5 +50,16 @@ export class MasterService {
     this.logger.debug('Inside fetchGstTypes');
     const gstTypes = await this.gstTypesRepo.find();
     return gstTypes.map((gstType) => new GstTypesResponseDto(gstType));
+  }
+
+  // * Fetch invoice-status with code
+  async fetchInvoiceStatusWithCode(statusCode: INVOICE_STATUS): Promise<any> {
+    this.logger.debug('Inside fetchInvoiceStatusWithCode');
+    const invoiceStatus = await this.invoiceStatus.findOne({
+      where: {
+        invoice_sts_code: statusCode,
+      },
+    });
+    return invoiceStatus;
   }
 }
