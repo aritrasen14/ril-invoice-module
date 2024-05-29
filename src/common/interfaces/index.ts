@@ -10,3 +10,4 @@ export * from './company.interface';
 export * from './project_type.interface';
 export * from './currency.interface';
 export * from './gst_types.interface';
+export * from './user.interface';

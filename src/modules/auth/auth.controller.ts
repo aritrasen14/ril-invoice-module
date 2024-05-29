@@ -11,7 +11,13 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { LoginDto, CurrentUserResponse, LoginResponseDto } from './dtos';
+import {
+  LoginDto,
+  CurrentUserResponse,
+  LoginResponseDto,
+  ForgetPasswordRequestDto,
+  ForgetPasswordResponseDto,
+} from './dtos';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -52,5 +58,19 @@ export class AuthController {
   async user(@Request() req): Promise<any> {
     this.logger.debug('Inside login', req.user);
     return req.user;
+  }
+
+  // * Forget password Api
+  @Post('/forget-password')
+  @ApiOperation({
+    summary: 'Forget Password user!',
+    operationId: 'forgetPassword',
+  })
+  @ApiOkResponse({
+    description: 'OTP sent successfully!',
+    type: ForgetPasswordResponseDto,
+  })
+  async forgetPassword(@Body() body: ForgetPasswordRequestDto) {
+    return this.authService.forgetPassword(body);
   }
 }

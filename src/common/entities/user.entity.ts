@@ -41,6 +41,18 @@ export class User extends DatabaseBaseEntity {
   })
   is_verified!: boolean;
 
+  @Column({
+    type: 'numeric',
+    nullable: true,
+  })
+  otp!: number;
+
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+  })
+  otp_creation_dt!: Date;
+
   @BeforeInsert()
   async setPassword(password: string) {
     this.logger.debug('Inside setPassword');
