@@ -92,6 +92,7 @@ export class InvoiceController {
   )
   @ApiOkResponse({
     description: 'Successfully fetched invoice!',
+    type: InvoiceResponseDto,
   })
   async fetchInvoiceById(
     @Param('id', UUIDValidationPipe) id: string,

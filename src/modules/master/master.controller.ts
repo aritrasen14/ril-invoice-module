@@ -1,12 +1,7 @@
 import { Controller, Get, Logger, UseGuards } from '@nestjs/common';
 import { MasterService } from './master.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import {
-  ApiOkResponse,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CurrenciesResponseDto,
   GstTypesResponseDto,
@@ -27,7 +22,7 @@ export class MasterController {
     summary: 'Fetch currencies!',
     operationId: 'fetchCurrencies',
   })
-  @ApiResponse({
+  @ApiOkResponse({
     description: 'Successfully fetched currencies!',
     type: [CurrenciesResponseDto],
   })
