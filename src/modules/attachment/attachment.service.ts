@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Attachment } from 'src/common/entities';
 import { QueryRunner, Repository } from 'typeorm';
@@ -11,6 +11,14 @@ export class AttachmentService {
   ) {}
 
   async createAttachment(attachment, queryRunner: QueryRunner) {
-    return await queryRunner.manager.save(Attachment, attachment);
+    const savedAttachment = await queryRunner.manager.save(
+      Attachment,
+      attachment,
+    );
+
+    if (!savedAttachment) {
+      throw new BadRequestException('Error while saving attachment!');
+    }
+    return savedAttachment;
   }
 }

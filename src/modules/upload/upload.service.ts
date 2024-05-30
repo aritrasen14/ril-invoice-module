@@ -1,4 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
 
@@ -30,6 +35,10 @@ export class UploadService {
 
     const presignedUrl = await this.s3.getSignedUrlPromise('putObject', params);
 
+    if (!presignedUrl) {
+      throw new NotFoundException('Error while uploading file inside AWS S3!');
+    }
+
     return presignedUrl;
   }
 
@@ -40,6 +49,12 @@ export class UploadService {
       Key: filename,
     };
 
-    return this.s3.deleteObject(params).promise();
+    const deletedFile = this.s3.deleteObject(params).promise();
+
+    if (!deletedFile) {
+      throw new BadRequestException('Error while deleting file from AWS S3!');
+    }
+
+    return deletedFile;
   }
 }

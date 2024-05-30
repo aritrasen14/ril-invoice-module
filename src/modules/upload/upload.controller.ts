@@ -35,6 +35,8 @@ export class UploadController {
   })
   async deleteFile(@Body() fileDelete: UploadRequest) {
     this.logger.debug('Inside deleteFile');
-    return this.uploadService.deleteFile(fileDelete.filename);
+    await this.uploadService.deleteFile(fileDelete.filename);
+
+    return { message: 'File deleted successfully from AWS S3!' };
   }
 }

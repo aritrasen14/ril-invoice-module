@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   Logger,
   Post,
   Request,
@@ -10,14 +9,13 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import {
   LoginDto,
-  CurrentUserResponse,
   LoginResponseDto,
   ForgetPasswordRequestDto,
   ForgetPasswordResponseDto,
 } from './dtos';
+import { UserResponseDto } from '../user/dtos/user_response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -40,24 +38,10 @@ export class AuthController {
   async login(
     @Request() req,
     @Body() body: LoginDto,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ access_token: string; user: UserResponseDto }> {
     this.logger.debug('Inside login');
-    return this.authService.generateToken(req.user);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('user')
-  @ApiOperation({
-    summary: 'Get Current User',
-    operationId: 'getCurrentUser',
-  })
-  @ApiOkResponse({
-    description: 'Successfully get current user details!',
-    type: CurrentUserResponse,
-  })
-  async user(@Request() req): Promise<any> {
-    this.logger.debug('Inside login', req.user);
-    return req.user;
+    const accessToke = this.authService.generateToken(req.user);
+    return { access_token: accessToke, user: req.user };
   }
 
   // * Forget password Api

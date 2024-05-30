@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Vendor } from '../../common/entities';
 import { Repository } from 'typeorm';
@@ -45,8 +50,16 @@ export class VendorService {
 
     const savedVendor = await this.vendorRepo.save(body);
 
+    if (!savedVendor) {
+      throw new BadRequestException('Error while saving the vendor!');
+    }
+
     // Fetch the saved entity with relations
     const resultQuery = await this.fetchVendorById(savedVendor.id);
+
+    if (!resultQuery) {
+      throw new NotFoundException('No Vendor Found!');
+    }
 
     // const resultQuery = await this.vendorRepo
     //   .createQueryBuilder()
@@ -65,6 +78,10 @@ export class VendorService {
       relations: this.relations,
     });
 
+    if (!resultQuery) {
+      throw new NotFoundException('No Vendor Found!');
+    }
+
     return new VendorResponseDto(resultQuery);
   }
 
@@ -76,7 +93,7 @@ export class VendorService {
 
     const updateResult = await this.vendorRepo.update(id, body);
 
-    if (updateResult.affected === 0) {
+    if (!updateResult || updateResult.affected === 0) {
       throw new NotFoundException(`Vendor with ID ${id} not found`);
     }
 

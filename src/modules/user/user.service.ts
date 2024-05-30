@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/common/entities';
 import { Repository } from 'typeorm';
@@ -21,6 +26,10 @@ export class UserService {
 
     const savedUser = await user.save();
 
+    if (!savedUser) {
+      throw new BadRequestException('Error while registering new user!');
+    }
+
     const resultQuery = await this.fetchUserById(savedUser.id);
 
     return resultQuery;
@@ -33,6 +42,10 @@ export class UserService {
       relations: ['user_role'],
     });
 
+    if (!resultQuery) {
+      throw new NotFoundException('User not found!');
+    }
+
     return new UserResponseDto(resultQuery);
   }
 
@@ -43,6 +56,10 @@ export class UserService {
       relations: ['user_role'],
     });
 
+    if (!resultQuery) {
+      throw new NotFoundException('User not found!');
+    }
+
     return new UserResponseDto(resultQuery);
   }
 
@@ -50,10 +67,14 @@ export class UserService {
     this.logger.debug('Inside getUserById');
     const resultQuery = await this.userRepo.findOne({ where: { id } });
 
+    if (!resultQuery) {
+      throw new NotFoundException('User not found!');
+    }
+
     return new UserResponseDto(resultQuery);
   }
 
-  async updateUser(id: string, body): Promise<UserResponseDto> {
+  async updateUser(id: string, body: Partial<User>): Promise<UserResponseDto> {
     const modifiedUser = await this.userRepo.update(id, body);
 
     if (!modifiedUser || modifiedUser.affected === 0) {

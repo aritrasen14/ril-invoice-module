@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Invoice } from '../../common/entities';
@@ -80,6 +85,10 @@ export class InvoiceService {
         request_no: `PR${lastNumber}`,
       });
 
+      if (!newlyGeneratedInvoice) {
+        throw new BadRequestException('Error while generating new invoice!');
+      }
+
       // * Adding the attachments
       const promisedAttachments = attachments.map(async (attachment) => {
         return await this.attachmentService.createAttachment(
@@ -94,13 +103,18 @@ export class InvoiceService {
       await Promise.all(promisedAttachments);
 
       // * Add the transaction-logs
-      await this.transactionLogsService.createTransactionLogs(
-        {
-          invoice_id: newlyGeneratedInvoice.id,
-          status_id: invoice_status.id,
-        },
-        queryRunner,
-      );
+      const savedTransactionLog =
+        await this.transactionLogsService.createTransactionLogs(
+          {
+            invoice_id: newlyGeneratedInvoice.id,
+            status_id: invoice_status.id,
+          },
+          queryRunner,
+        );
+
+      if (!savedTransactionLog) {
+        throw new BadRequestException('Error while ');
+      }
 
       await queryRunner.commitTransaction();
 

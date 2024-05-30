@@ -15,6 +15,6 @@ export class TransactionLogsService {
   // * create transaction-logs
   async createTransactionLogs(invoiceLog: any, queryRunner: QueryRunner) {
     this.logger.debug('Inside createTransactionLogs');
-    await queryRunner.manager.save(TransactionLogs, invoiceLog);
+    return await queryRunner.manager.save(TransactionLogs, invoiceLog);
   }
 }

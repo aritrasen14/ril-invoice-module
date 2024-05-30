@@ -40,14 +40,12 @@ export class AuthService {
     return user;
   }
 
-  generateToken(user: UserResponseDto): { access_token: string } {
+  generateToken(user: UserResponseDto): string {
     this.logger.debug('Inside generateToken');
-    return {
-      access_token: this.jwtService.sign({
-        id: user.id,
-        user_role_code: user.user_role_code,
-      }),
-    };
+    return this.jwtService.sign({
+      id: user.id,
+      user_role_code: user.user_role_code,
+    });
   }
 
   async forgetPassword(body: ForgetPasswordRequestDto) {
@@ -108,11 +106,15 @@ export class AuthService {
       const generatedSalt = await bcrypt.genSalt();
       const newHashedPassword = await bcrypt.hash(newPassword, generatedSalt);
 
-      await this.userService.updateUser(foundUser.id, {
+      const updatedUser = await this.userService.updateUser(foundUser.id, {
         otp: null,
         password: newHashedPassword,
         otp_creation_dt: null,
       });
+
+      if (!updatedUser) {
+        throw new BadRequestException('Error while updating the new password!');
+      }
 
       return { message: 'User password updated successfully!' };
     } else {
