@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -51,6 +52,7 @@ export class InvoiceController {
     description: 'List of Invoices!',
   })
   async fetchInvoices(
+    @Req() req,
     @Query() query: PaginationQuery,
   ): Promise<Pagination<InvoiceResponseDto>> {
     this.logger.debug('Inside fetchInvoices');
@@ -59,7 +61,20 @@ export class InvoiceController {
       limit: query.limit,
       page: query.page,
     };
-    return await this.invoiceService.paginate(options);
+
+    const whereCondition = {};
+
+    this.logger.debug('req', req.user);
+
+    if (query.invoiceStatusId) {
+      whereCondition['invoice_status_id'] = query.invoiceStatusId;
+    }
+
+    if (req.user.user_role_code === 'V') {
+      whereCondition['user_id'] = req.user.id;
+    }
+
+    return await this.invoiceService.paginate(options, whereCondition);
   }
 
   // * Submit a invoice
@@ -90,6 +105,10 @@ export class InvoiceController {
     USER_ROLES.INVOICE_VALIDATION_TEAM,
     USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
   )
+  @ApiOperation({
+    summary: 'Fetch Invoice by id!',
+    operationId: 'fetchInvoiceById',
+  })
   @ApiOkResponse({
     description: 'Successfully fetched invoice!',
     type: InvoiceResponseDto,
@@ -105,25 +124,25 @@ export class InvoiceController {
   // * Delete invoice
 
   // * Fetch invoice by status
-  @Get('/status/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(
-    USER_ROLES.VENDOR,
-    USER_ROLES.SCROLL_TEAM,
-    USER_ROLES.INVOICE_VALIDATION_TEAM,
-    USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
-  )
-  @ApiOperation({
-    summary: 'Fetch invoices by status!',
-    operationId: 'fetchInvoiceByStatus',
-  })
-  @ApiOkResponse({
-    description: 'Successfully fetched invoices by status!',
-    type: [InvoiceResponseDto],
-  })
-  async fetchInvoiceByStatus(
-    @Param('id', UUIDValidationPipe) invoiceStatusId: string,
-  ): Promise<InvoiceResponseDto[]> {
-    return await this.invoiceService.fetchInvoicesByStatus(invoiceStatusId);
-  }
+  // @Get('/status/:id')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles(
+  //   USER_ROLES.VENDOR,
+  //   USER_ROLES.SCROLL_TEAM,
+  //   USER_ROLES.INVOICE_VALIDATION_TEAM,
+  //   USER_ROLES.FINANCE_AND_ACCOUNTS_TEAM,
+  // )
+  // @ApiOperation({
+  //   summary: 'Fetch invoices by status!',
+  //   operationId: 'fetchInvoiceByStatus',
+  // })
+  // @ApiOkResponse({
+  //   description: 'Successfully fetched invoices by status!',
+  //   type: [InvoiceResponseDto],
+  // })
+  // async fetchInvoiceByStatus(
+  //   @Param('id', UUIDValidationPipe) invoiceStatusId: string,
+  // ): Promise<InvoiceResponseDto[]> {
+  //   return await this.invoiceService.fetchInvoicesByStatus(invoiceStatusId);
+  // }
 }

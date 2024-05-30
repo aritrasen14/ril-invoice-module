@@ -3,6 +3,7 @@ import { EntityResponseDto } from 'src/common/dtos';
 import { Vendor } from 'src/common/entities';
 import {
   ICountry,
+  IUser,
   IUserRoles,
   IVendor,
   IVendorTypes,
@@ -11,7 +12,7 @@ import {
 // * Response DTO for Vendor
 export class VendorResponseDto
   extends EntityResponseDto
-  implements IVendor, IUserRoles, ICountry, IVendorTypes
+  implements IVendor, IUserRoles, ICountry, IVendorTypes, IUser
 {
   constructor(vendor: Vendor) {
     super();
@@ -34,6 +35,8 @@ export class VendorResponseDto
     // * Values coming from vendor_types
     this.vendor_type_code = vendor.vendor_type?.vendor_type_code || null;
     this.vendor_type_des = vendor.vendor_type?.vendor_type_des || null;
+
+    // * Values coming from user
   }
 
   @ApiResponseProperty({

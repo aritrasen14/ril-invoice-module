@@ -3,6 +3,7 @@ import { DatabaseBaseEntity } from './database_base_entity.entity';
 import { UserRoles } from './user_roles.entity';
 import { CountryCodes } from './country_codes.entity';
 import { VendorTypes } from './vendor_types.entity';
+import { User } from './user.entity';
 
 @Entity('vendor')
 export class Vendor extends DatabaseBaseEntity {
@@ -60,4 +61,11 @@ export class Vendor extends DatabaseBaseEntity {
   })
   @Index({ unique: true })
   vendor_code!: string;
+
+  @Column({ type: 'uuid' })
+  user_id!: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user!: User;
 }

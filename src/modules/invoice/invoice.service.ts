@@ -159,10 +159,17 @@ export class InvoiceService {
     options: IPaginationOptions,
     whereConditions = {},
   ): Promise<Pagination<InvoiceResponseDto>> {
-    const queryBuilder = this.invoiceRepo.createQueryBuilder('invoice');
+    const queryBuilder = this.invoiceRepo
+      .createQueryBuilder('invoice')
+      .innerJoinAndSelect('invoice.vendor', 'vendor')
+      .innerJoinAndSelect('vendor.user', 'user');
 
     for (const [key, value] of Object.entries(whereConditions)) {
-      queryBuilder.andWhere(`invoice.${key} = :${key}`, { [key]: value });
+      if (key === 'user_id') {
+        queryBuilder.andWhere(`user.id = :id`, { id: value });
+      } else {
+        queryBuilder.andWhere(`invoice.${key} = :${key}`, { [key]: value });
+      }
     }
 
     const invoices = await paginate<Invoice>(queryBuilder, options);

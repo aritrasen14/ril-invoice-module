@@ -1,5 +1,5 @@
 import { Controller, Get, Logger, Param, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { USER_ROLES } from 'src/common/enums';
@@ -30,7 +30,7 @@ export class UserAccessStatusController {
     summary: 'Fetch access statuses',
     operationId: 'fetchAccessStatues',
   })
-  @ApiResponse({
+  @ApiOkResponse({
     description: 'Successfully fetched access statues!',
     type: [UserAccessStatusResponseDto],
   })
