@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserAccessStatus } from 'src/common/entities';
 import { Repository } from 'typeorm';
+import { UserAccessStatusResponseDto } from './dtos';
 
 @Injectable()
 export class UserAccessStatusService {
@@ -15,11 +16,17 @@ export class UserAccessStatusService {
     private userAccessStatusRepo: Repository<UserAccessStatus>,
   ) {}
 
-  async userAccessStatuses(user_role_id: string) {
+  async userAccessStatuses(
+    user_role_id: string,
+  ): Promise<UserAccessStatusResponseDto[]> {
     this.logger.debug('Inside userAccessStatuses');
-    return await this.userAccessStatusRepo.find({
+    const userAccessStatues = await this.userAccessStatusRepo.find({
       where: { user_role_id: user_role_id },
       relations: this.relations,
     });
+
+    return userAccessStatues.map(
+      (userAccessStatus) => new UserAccessStatusResponseDto(userAccessStatus),
+    );
   }
 }

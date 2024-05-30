@@ -6,6 +6,7 @@ import { USER_ROLES } from 'src/common/enums';
 import { Roles } from '../auth/roles.decorator';
 import { UUIDValidationPipe } from 'src/Common/pipes';
 import { UserAccessStatusService } from './user-access-status.service';
+import { UserAccessStatusResponseDto } from './dtos';
 
 @ApiTags('user-access')
 @Controller('user-access-status')
@@ -31,11 +32,11 @@ export class UserAccessStatusController {
   })
   @ApiResponse({
     description: 'Successfully fetched access statues!',
-    // type: [],
+    type: [UserAccessStatusResponseDto],
   })
   async fetchAccessStatues(
     @Param('id', UUIDValidationPipe) userRoleId: string,
-  ) {
+  ): Promise<UserAccessStatusResponseDto[]> {
     this.logger.debug('Inside fetchAccessStatues');
     return await this.userAccessStatusService.userAccessStatuses(userRoleId);
   }

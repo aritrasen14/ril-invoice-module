@@ -1,22 +1,7 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Logger,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
-import {
-  ApiBody,
-  ApiConsumes,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Delete, Logger, Post } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UploadService } from './upload.service';
 import { UploadRequest, UploadResponse } from './dtos';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('File Upload & Delete')
 @Controller('upload')
@@ -34,24 +19,9 @@ export class UploadController {
     description: 'AWS pre-signed URL generated successfully!',
     type: UploadResponse,
   })
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiBody({
-    required: true,
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
-  async uploadFile(@UploadedFile() fileUpload) {
-    this.logger.debug('Inside logger');
+  async uploadFile(@Body() fileUpload: UploadRequest) {
     return {
-      url: await this.uploadService.uploadFile(fileUpload.originalname),
+      url: await this.uploadService.uploadFile(fileUpload.filename),
     };
   }
 

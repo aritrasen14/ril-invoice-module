@@ -97,6 +97,7 @@ export class InvoiceStatusesResponseDto
     this.updated_at = invoiceStatus.updated_at;
     this.is_active = invoiceStatus.is_active;
 
+    // * values coming from invoice-status
     this.invoice_sts_code = invoiceStatus.invoice_sts_code;
     this.invoice_sts_des = invoiceStatus.invoice_sts_des;
   }

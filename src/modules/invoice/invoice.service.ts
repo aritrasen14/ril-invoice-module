@@ -157,8 +157,15 @@ export class InvoiceService {
   // * Method for Pagination
   async paginate(
     options: IPaginationOptions,
+    whereConditions = {},
   ): Promise<Pagination<InvoiceResponseDto>> {
-    const invoices = await paginate<Invoice>(this.invoiceRepo, options);
+    const queryBuilder = this.invoiceRepo.createQueryBuilder('invoice');
+
+    for (const [key, value] of Object.entries(whereConditions)) {
+      queryBuilder.andWhere(`invoice.${key} = :${key}`, { [key]: value });
+    }
+
+    const invoices = await paginate<Invoice>(queryBuilder, options);
     return {
       items: invoices.items.map((invoice) => new InvoiceResponseDto(invoice)),
       meta: invoices.meta,
