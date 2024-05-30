@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
@@ -12,6 +13,7 @@ import { FORGET_PASSWORD_STATUS } from '../enums';
 @Entity('forget_password_logs')
 export class ForgetPasswordLogs extends DatabaseBaseEntity {
   @Column({ type: 'uuid' })
+  @Index()
   user_id!: string;
 
   @ManyToOne(() => User)
@@ -24,7 +26,6 @@ export class ForgetPasswordLogs extends DatabaseBaseEntity {
   @CreateDateColumn({
     type: 'timestamptz',
     update: false,
-    default: () => 'CURRENT_TIMESTAMP',
   })
   expired_time: Date;
 }

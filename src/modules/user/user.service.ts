@@ -75,6 +75,7 @@ export class UserService {
   }
 
   async updateUser(id: string, body: Partial<User>): Promise<UserResponseDto> {
+    this.logger.debug('Inside updateUser');
     const modifiedUser = await this.userRepo.update(id, body);
 
     if (!modifiedUser || modifiedUser.affected === 0) {

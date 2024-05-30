@@ -5,10 +5,16 @@ import {
   Logger,
   Param,
   Post,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import {
@@ -16,10 +22,13 @@ import {
   LoginResponseDto,
   ForgetPasswordRequestDto,
   ForgetPasswordResponseDto,
+  ResetPasswordResponseDto,
+  ResetPasswordRequestDto,
+  ForgetPasswordValidateResponse,
 } from './dtos';
 import { UserResponseDto } from '../user/dtos/user_response.dto';
-import { UUIDValidationPipe } from 'src/Common/pipes';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { UUIDValidationPipe } from 'src/Common/pipes';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -64,16 +73,39 @@ export class AuthController {
 
   // * Reset password Api
   @UseGuards(JwtAuthGuard)
-  @Get('/reset-password/:token')
+  @Post('/reset-password/:token')
   @ApiOperation({
-    summary: 'Forget Password user!',
-    operationId: 'forgetPassword',
+    summary: 'Reset Password user!',
+    operationId: 'resetPassword',
   })
   @ApiOkResponse({
-    description: 'OTP sent successfully!',
-    type: ForgetPasswordResponseDto,
+    description: 'Password reset successfully!',
+    type: ResetPasswordResponseDto,
   })
-  async resetPassword(@Param('token') token: string) {
-    // return this.authService.resetPassword();
+  async resetPassword(
+    @Req() req,
+    @Param('token') token: string,
+    @Body() body: ResetPasswordRequestDto,
+  ) {
+    return this.authService.resetPassword(req.user, token, body);
+  }
+
+  // * Forget password validation
+  @Get('/:id')
+  @ApiOperation({
+    summary: 'Forget Password validation!',
+    operationId: 'resetPasswordValidation',
+  })
+  @ApiConflictResponse({
+    description: 'Link expired or already used!',
+    type: ForgetPasswordValidateResponse,
+  })
+  async forgetPasswordValidation(
+    @Param('id', UUIDValidationPipe) forgetPasswordId: string,
+  ) {
+    const isLinkValid =
+      await this.authService.forgetPasswordValidation(forgetPasswordId);
+
+    return { isValid: isLinkValid };
   }
 }
