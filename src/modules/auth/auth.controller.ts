@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   Logger,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -16,6 +18,8 @@ import {
   ForgetPasswordResponseDto,
 } from './dtos';
 import { UserResponseDto } from '../user/dtos/user_response.dto';
+import { UUIDValidationPipe } from 'src/Common/pipes';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -51,10 +55,25 @@ export class AuthController {
     operationId: 'forgetPassword',
   })
   @ApiOkResponse({
-    description: 'OTP sent successfully!',
+    description: 'Password changed email sent successfully!',
     type: ForgetPasswordResponseDto,
   })
   async forgetPassword(@Body() body: ForgetPasswordRequestDto) {
     return this.authService.forgetPassword(body);
+  }
+
+  // * Reset password Api
+  @UseGuards(JwtAuthGuard)
+  @Get('/reset-password/:token')
+  @ApiOperation({
+    summary: 'Forget Password user!',
+    operationId: 'forgetPassword',
+  })
+  @ApiOkResponse({
+    description: 'OTP sent successfully!',
+    type: ForgetPasswordResponseDto,
+  })
+  async resetPassword(@Param('token') token: string) {
+    // return this.authService.resetPassword();
   }
 }

@@ -19,3 +19,4 @@ export * from './project.entity';
 export * from './user.entity';
 export * from './transaction_logs.entity';
 export * from './currency.entity';
+export * from './forget_password_logs.entity';

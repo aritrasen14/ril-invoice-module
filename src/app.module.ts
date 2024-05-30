@@ -17,6 +17,7 @@ import { UserAccessStatusModule } from './modules/user-access-status/user-access
 import { TransactionLogsModule } from './modules/transaction-logs/transaction-logs.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { UploadModule } from './modules/upload/upload.module';
+import { ForgetPasswordLogsModule } from './modules/forget-password-logs/forget-password-logs.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { UploadModule } from './modules/upload/upload.module';
     UserAccessStatusModule,
     TransactionLogsModule,
     UploadModule,
+    ForgetPasswordLogsModule,
   ],
   controllers: [AppController],
   providers: [

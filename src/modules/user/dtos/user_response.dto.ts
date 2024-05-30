@@ -18,8 +18,6 @@ export class UserResponseDto
     this.email = user.email;
     this.password = user.password;
     this.is_verified = user.is_verified;
-    this.otp = user.otp;
-    this.otp_creation_dt = user.otp_creation_dt;
 
     // *  Values Coming from UserRoles
     this.user_role_des = user.user_role?.user_role_des || null;
@@ -50,12 +48,4 @@ export class UserResponseDto
     example: 'V',
   })
   readonly user_role_code?: string;
-
-  @ApiResponseProperty({
-    example: 1234,
-  })
-  readonly otp?: number;
-
-  @ApiResponseProperty()
-  readonly otp_creation_dt?: Date;
 }
