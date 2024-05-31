@@ -1,5 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 import { DatabaseBaseEntity } from './database_base_entity.entity';
+import { INVOICE_TYPE } from '../enums';
 
 @Entity('invoice_types')
 export class InvoiceTypes extends DatabaseBaseEntity {
@@ -13,7 +14,8 @@ export class InvoiceTypes extends DatabaseBaseEntity {
     type: 'varchar',
     length: 36,
     unique: true,
+    enum: INVOICE_TYPE,
   })
   @Index({ unique: true })
-  invoice_type_code!: string;
+  invoice_type_code!: INVOICE_TYPE;
 }
